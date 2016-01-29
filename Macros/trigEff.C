@@ -51,6 +51,8 @@ double PError(double A, double eA, double B, double eB);
 const int  nPtBin = 12;
 double m1S_low = 7.77;
 double m1S_high = 10;
+double m2S_low = 8.333;
+double m3S_high = 10.563;
 
 
 void trigEff(){
