@@ -36,6 +36,7 @@
 //OniaTree_Ups1SMM_5p02TeV_TuneCUETP8M1_ptUps03_noCUT.root
 //Do the following:
 //root -l rootFileName.root
+//hionia->cd() //for pp files
 //myTree->MakeClass("myClass")
 //.q
 //look in myClass.h and myClass.C to learn
