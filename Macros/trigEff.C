@@ -48,7 +48,7 @@ double FindCenWeight(int Bin);
 double RError(double A, double eA, double B, double eB);
 double PError(double A, double eA, double B, double eB);
 
-const int  nPtBin = 12;
+const int  nPtBin = 2;
 double m1S_low = 7.77;
 double m1S_high = 10;
 double m2S_low = 8.333;
@@ -79,14 +79,28 @@ void trigEff(){
   double          ptWeight; 
   double          ptWeightArr[2]={1.0,1.324};
   double          centWeight;
-  double          ptBin[nPtBin] = {0.25,0.75,1.25,1.75,2.25,2.75,3.25,3.75,4.25,4.75,5.25,5.75};
-  double          ptBinErr[nPtBin] = {0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25};
+  double          ptBin[nPtBin] = {1.5,4.5};
+  double          ptBinErr[nPtBin] = {1.5,1.5};
   double 	  L1Match[nPtBin];
   double 	  L1Err[nPtBin];
   double 	  L3Match[nPtBin];
   double 	  L3Err[nPtBin];
   double 	  L1L3Rat[nPtBin];
   double 	  L1L3RatErr[nPtBin];
+    
+    
+    double    L1Reco[nPtbin];
+    double    L1Gen[nPtBin];
+    double    L1RecoErr[nPtBin];
+    double    L1GenErr[nPtBin];
+    double    RECO;
+    double    GEN;
+    double    RECOERR;
+    double    GENERR;
+    
+
+    
+    
   
   Int_t           Centrality; 
   ULong64_t       HLTriggers;
@@ -127,6 +141,27 @@ void trigEff(){
   TBranch        *b_Reco_QQ_mumi_dxy;   //!
   TBranch        *b_Reco_QQ_mupl_dz;   //!
   TBranch        *b_Reco_QQ_mumi_dz;   //!
+    
+    TBranch        *b_Centrality;   //!
+    TBranch        *b_HLTriggers;   //!
+    TBranch        *b_Gen_QQ_size;   //!
+    TBranch        *b_Gen_QQ_sign;   //!
+    TBranch        *b_Gen_QQ_4mom;   //!
+    TBranch        *b_Gen_QQ_mupl_4mom;   //!
+    TBranch        *b_Gen_QQ_mumi_4mom;   //!
+    TBranch        *b_Gen_QQ_trig;   //!
+    TBranch        *b_Gen_QQ_VtxProb;   //!
+    TBranch        *b_Gen_QQ_mupl_isGoodMuon;   //!
+    TBranch        *b_Gen_QQ_mumi_isGoodMuon;   //!
+    TBranch        *b_Gen_QQ_mupl_nPixWMea;   //!
+    TBranch        *b_Gen_QQ_mumi_nPixWMea;   //!
+    TBranch        *b_Gen_QQ_mupl_nTrkWMea;   //!
+    TBranch        *b_Gen_QQ_mumi_nTrkWMea;   //!
+    TBranch        *b_Gen_QQ_mupl_dxy;   //!
+    TBranch        *b_Gen_QQ_mumi_dxy;   //!
+    TBranch        *b_Gen_QQ_mupl_dz;   //!
+    TBranch        *b_Gen_QQ_mumi_dz;   //!
+
 
   //Set object pointer, Initialize
   Reco_QQ_4mom = 0;
@@ -155,11 +190,21 @@ void trigEff(){
   
   TH1D  *hMassL1[nPtBin];
   TH1D  *hMassL3[nPtBin];
+    
+    TH1D  *hgenMassL1[nPtBin];
+    TH1D  *hgenMassL3[nPtBin];
   
   for(int h=0;h<nPtBin;h++){
     hMassL1[h] = new TH1D(Form("hMassL1_%d",h),"",100,m1S_low,m1S_high);
     hMassL3[h] = new TH1D(Form("hMassL3_%d",h),"",100,m1S_low,m1S_high);
     }
+    
+    
+    for(int g=0;g<nPtBin;g++){
+        hgenMassL1[g] = new TH1D(Form("hgenMassL1_%d",g),"",100,m1S_low,m1S_high);
+        hgenMassL3[g] = new TH1D(Form("hgenMassL3_%d",g),"",100,m1S_low,m1S_high);
+    }
+
 
 
 
@@ -210,22 +255,23 @@ void trigEff(){
         if((HLTriggers&262144)==262144 && (Reco_QQ_trig[iQQ]&262144)==262144){trigL3Dmu = 1;}
         
         //weights only needed for PbPb
-        double weight = 0;
-        ptWeight=0;
-        centWeight = FindCenWeight(Centrality); 
-        if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
-        if(qq4mom->Pt()>3){ptWeight = ptWeightArr[1];}
-        weight = centWeight*ptWeight;
+       // double weight = 0;
+       // ptWeight=0;
+       // centWeight = FindCenWeight(Centrality);
+       // if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
+       // if(qq4mom->Pt()>3){ptWeight = ptWeightArr[1];}
+       // weight = centWeight*ptWeight;
         
         bool L1Pass=0;
         bool L3Pass=0;
         if (Reco_QQ_sign[iQQ]==0 && acceptMu && mupl_cut && mumi_cut && trigL1Dmu){L1Pass=1;}
         if (Reco_QQ_sign[iQQ]==0 && acceptMu && mupl_cut && mumi_cut && trigL3Dmu){L3Pass=1;}
-        
+         
+         
         for(int i = 0; i<nPtBin;i++){
-           if(qq4mom->Pt()>(ptBin[i]-0.25) && qq4mom->Pt()<(ptBin[i]+0.25)){
-	   if(L1Pass){hMassL1[i]->Fill(qq4mom->M(),weight);}
-	   if(L3Pass){hMassL3[i]->Fill(qq4mom->M(),weight);}
+           if(qq4mom->Pt()>(ptBin[i]-1.5) && qq4mom->Pt()<(ptBin[i]+1.5)){
+	   if(L1Pass){hMassL1[i]->Fill(qq4mom->M());}
+	   if(L3Pass){hMassL3[i]->Fill(qq4mom->M());}
            }
           }
 
@@ -233,6 +279,68 @@ void trigEff(){
 	}
 
 
+ //Dinonminator loop
+      for (int iQQ=0; iQQ<Gen_QQ_size;iQQ++){
+          TLorentzVector *qq4mom = (TLorentzVector*) Gen_QQ_4mom->At(iQQ);
+          TLorentzVector *mumi4mom = (TLorentzVector*) Gen_QQ_mumi_4mom->At(iQQ);
+          TLorentzVector *mupl4mom = (TLorentzVector*) Gen_QQ_mupl_4mom->At(iQQ);
+          
+          //--Muid cuts for muon minus
+         // muMiDxy=Gen_QQ_mumi_dxy[iQQ];
+         // muMiDz=Gen_QQ_mumi_dz[iQQ];
+         // muMiNPxlLayers=Gen_QQ_mumi_nPixWMea[iQQ];
+         // muMiNTrkLayers=Gen_QQ_mumi_nTrkWMea[iQQ];
+         // muMiGoodMu = Gen_QQ_mumi_isGoodMuon[iQQ];
+          
+          //--Muid cuts for muon plus
+         // muPlDxy=Gen_QQ_mupl_dxy[iQQ];
+         // muPlDz=Gen_QQ_mupl_dz[iQQ];
+         // muPlNPxlLayers=Gen_QQ_mupl_nPixWMea[iQQ];
+         // muPlNTrkLayers=Gen_QQ_mupl_nTrkWMea[iQQ];
+         // muPlGoodMu = Gen_QQ_mupl_isGoodMuon[iQQ];
+         // vProb = Gen_QQ_VtxProb[iQQ];
+          
+          bool mupl_cut = 0;
+          bool mumi_cut = 0;
+          bool acceptMu = 0;
+          bool trigL1Dmu = 0;
+          bool trigL3Dmu = 0;
+          
+          //--Muon id cuts
+          if( (muPlGoodMu==1) && muPlNTrkLayers> 5 &&  muPlNPxlLayers > 0 && TMath::Abs(muPlDxy) < 0.3 && TMath::Abs(muPlDz) < 20 && vProb > 0.01){mupl_cut = 1;}
+          if( (muMiGoodMu==1) && muMiNTrkLayers> 5 &&  muMiNPxlLayers > 0 && TMath::Abs(muMiDxy) < 0.3 && TMath::Abs(muMiDz) < 20 ){mumi_cut = 1;}
+          
+          //check if muons are in acceptance
+          if(IsAccept(mupl4mom) && IsAccept(mumi4mom)){acceptMu = 1;}
+          
+          //check if trigger bit is matched to dimuon
+          if((HLTriggers&1)==1 && (Gen_QQ_trig[iQQ]&1)==1){trigL1Dmu = 1;}
+          if((HLTriggers&262144)==262144 && (Gen_QQ_trig[iQQ]&262144)==262144){trigL3Dmu = 1;}
+          
+          //weights only needed for PbPb
+         // double weight = 0;
+         // ptWeight=0;
+         // centWeight = FindCenWeight(Centrality);
+         // if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
+         // if(qq4mom->Pt()>3){ptWeight = ptWeightArr[1];}
+         // weight = centWeight*ptWeight;
+          
+          bool L1Pass=0;
+          bool L3Pass=0;
+          if (acceptMu){L1Pass=1;}
+          if (acceptMu){L3Pass=1;}
+          
+          
+          for(int i = 0; i<nPtBin;i++){
+              if(qq4mom->Pt()>(ptBin[i]-1.5) && qq4mom->Pt()<(ptBin[i]+1.5)){
+                  if(L1Pass){hgenMassL1[i]->Fill(qq4mom->M());}
+                  if(L3Pass){hgenMassL3[i]->Fill(qq4mom->M());}
+              }
+          }
+          
+          
+      }
+      
 
      }
 
@@ -241,18 +349,55 @@ void trigEff(){
   int binhi = hMassL1[0] ->GetXaxis()->FindBin(m1S_high);
   
   //calculating the number of 1S upsilons matched to L1/L3
-  for(int j = 0; j<nPtBin; j++){
-    double error1 = 0;
-    double error3 = 0;
-    L1Match[j] = hMassL1[j]->IntegralAndError(binlow,binhi,error1);
-    L1Err[j] = error1;
-    L3Match[j] = hMassL3[j]->IntegralAndError(binlow,binhi,error3);
-    L3Err[j] = error3;
-    L1L3Rat[j] = L1Match[j]/L3Match[j];
-    L1L3RatErr[j] = RError(L1Match[j],L1Err[j],L3Match[j],L3Err[j]);
-    cout<< L1Match[j] <<" "<< L3Match[j]<<" "<< L1L3Rat[j]<<endl;
-    }
+  //for(int j = 0; j<nPtBin; j++){
+  //double error1 = 0;
+  //  double error3 = 0;
+  //L1Match[j] = hMassL1[j]->IntegralAndError(binlow,binhi,error1);
+  //  L1Err[j] = error1;
+  //  L3Match[j] = hMassL3[j]->IntegralAndError(binlow,binhi,error3);
+  //  L3Err[j] = error3;
+  //  L1L3Rat[j] = L1Match[j]/L3Match[j];
+  //  L1L3RatErr[j] = RError(L1Match[j],L1Err[j],L3Match[j],L3Err[j]);
+  //  cout<< L1Match[j] <<" "<< L3Match[j]<<" "<< L1L3Rat[j]<<endl;
+  // }
+    
 
+    
+    for(int j = 0; j<nPtBin; j++){
+        double errorreco = 0;
+        double errorgen = 0;
+     L1Reco[j] = hMassL1[j]->IntegralAndError(binlow,binhi,errorreco);
+     L1RecoErr[j] = errorreco;
+     L1Gen[j] = hgenMassL1[j]->IntegralAndError(binlow,binhi,errorgen);
+        L1GenErr[j] = errorgen;
+    }
+    
+    
+    RECO13 = 0.;
+    GEN13 = 0.;
+    RECO13ERR = 0.;
+    GEN13ERR = 0.;
+    RECO36 = 0.;
+    GEN36 = 0.;
+    RECO36ERR = 0.;
+    GEN36ERR = 0.;
+
+    RECO13 = L1Reco[1];
+    GEN13 = L1Gen[1];
+    RECO13ERR = L1RecoErr[1];
+    GEN13ERR = L1GenErr[1];
+    RECO36 = L1Reco[2];
+    GEN36 = L1Gen[2];
+    RECO36ERR = L1RecoErr[2];
+    GEN36ERR = L1GenErr[2];
+
+    
+    Efficiency1S13 = RECO13/GEN13;
+    Efficiency1S36 = RECO36/GEN36;
+    
+
+    
+    
   TCanvas *c1 = new TCanvas("c1","c1",200,10,600,400);
 
   TGraphErrors *TrigEff = new TGraphErrors(nPtBin,ptBin , L1L3Rat,ptBinErr , L1L3RatErr);
@@ -268,7 +413,7 @@ void trigEff(){
   c1->SaveAs("L1L3Matching_Upsilon1S.png");
 
 }
-//This is now Santon'as private branch
+
 
 //Returns a boolean for muon in acceptance
 bool IsAccept(TLorentzVector *Muon){
