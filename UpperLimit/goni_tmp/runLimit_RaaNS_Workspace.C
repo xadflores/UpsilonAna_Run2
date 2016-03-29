@@ -1,8 +1,12 @@
 #include <algorithm>
-
-void runLimit_RaaNS_Workspace(const char *filename="TRIAL.root", const char *poiname="raa3", const char *pdfname="joint", const char *wsname="wcombo");
-
+#include <RooStats/ProfileLikelihoodCalculator.h>
+#include <TLatex.h>
+#include <RooStats/LikelihoodInterval.h>
+#include <RooStats/LikelihoodIntervalPlot.h>
 #include "StandardHypoTestInvDemo.C"
+
+void runLimit_RaaNS_Workspace(const char *filename="fitresult_combo.root", const char *poiname="raa3", const char *pdfname="joint", const char *wsname="wcombo");
+
 
 double CI = 0.95;
 
@@ -19,7 +23,7 @@ void runLimit_RaaNS_Workspace(const char *filename, const char *poiname, const c
    RooWorkspace* ws = (RooWorkspace*) f->Get(wsname);
    RooStats::ModelConfig *sbHypo = (RooStats::ModelConfig*) ws->obj("SbHypo");
    RooStats::ModelConfig *bHypo = (RooStats::ModelConfig*) ws->obj("BHypo");
-   cout << "observables: " << sbHypo.GetObservables()->getSize() << endl;
+   cout << "observables: " << sbHypo->GetObservables()->getSize() << endl;
    theVar = ws->var(poiname);
    // if (!theVar) theVar = ws->function(poiname);
    pdf = ws->pdf(pdfname);
@@ -108,10 +112,11 @@ void runLimit_RaaNS_Workspace(const char *filename, const char *poiname, const c
    TStopwatch tw; 
    tw.Start();
 
-   pair<double,double> lims = StandardHypoTestInvDemo(f->GetName(),
+   //pair<double,double> lims = StandardHypoTestInvDemo(f->GetName(),
+   StandardHypoTestInvDemo(f->GetName(),
          wsname,
-         sbHypo,
-         bHypo,
+         "SbHypo",
+         "BHypo",
          "data",                 
          calculatorType,
          testStatType, 
@@ -143,5 +148,5 @@ void runLimit_RaaNS_Workspace(const char *filename, const char *poiname, const c
          <<1000<<","
          <<false<<","
          <<0<<");" << endl;
-   of << lims.first << " " << lims.second << endl;
+//   of << lims.first << " " << lims.second << endl;
 }

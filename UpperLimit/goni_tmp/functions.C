@@ -28,7 +28,7 @@ TString dirname_ = "";
 TString treeName = "UpsilonTree_allsign";
 /*Only for track rotation*/
 TString treeTrkRot = "UpsilonTree_trkRot";
-
+/*
 bool buildPdf(RooWorkspace &ws, bool hi, int bkgdModel = 3, bool TrkRotBkgd = 0) {
 
 	double const M1S(9.460);
@@ -36,8 +36,7 @@ bool buildPdf(RooWorkspace &ws, bool hi, int bkgdModel = 3, bool TrkRotBkgd = 0)
 	double const M3S(10.355);
 	RooRealVar * mass = ws.var("invariantMass");
 	if (!mass) {
-		mass = new RooRealVar("invariantMass", "#mu#mu mass", mmin, mmax, 
-				"GeV/c^{2}");
+		mass = new RooRealVar("invariantMass", "#mu#mu mass", mmin, mmax, "GeV/c^{2}");
 	}
 	//   mass->setRange(mmin,mmax);
 	RooRealVar mean("mean", "mean", M1S, M1S-0.3, M1S+0.3, "GeV/c^{2}");
@@ -269,7 +268,7 @@ bool buildPdf(RooWorkspace &ws, bool hi, int bkgdModel = 3, bool TrkRotBkgd = 0)
 	}
 	return true;
 }
-
+*/
 RooSimultaneous* buildSimPdf(RooWorkspace &ws, RooCategory& dataCat) {
 
 	if (ws.pdf("simPdf"))
@@ -317,23 +316,22 @@ bool readData(RooWorkspace &ws, TString HIfilename, TString ppFilename,
 
 	RooRealVar * mass = ws.var("invariantMass");
 	if (!mass) {
-		mass = new RooRealVar("invariantMass", "#mu#mu mass", mmin, mmax, 
-				"GeV/c^{2}");
+		mass = new RooRealVar("invariantMass", "#mu#mu mass", mmin, mmax, "GeV/c^{2}");
 		mass->setBins(70);
 	}
 	RooRealVar muppt("muPlusPt" ,"#mu+ pt",2,20,"GeV/c"); 
 	RooRealVar mumpt("muMinusPt","#mu- pt",2,20,"GeV/c"); 
-	RooRealVar upsPt("upsPt","p_{T}(#Upsilon)",0.,"GeV/c");
+	RooRealVar dimuPt("dimuPt","p_{T}(#DiMuon)",0.,"GeV/c"); //RooRealVar upsPt("upsPt","p_{T}(#Upsilon)",0.,"GeV/c");
 	RooRealVar vProb("vProb","vProb",0.05,1);
 	//   RooRealVar upsEta("upsEta","#eta(#Upsilon)",0.,"");
-	RooRealVar upsRapidity("upsRapidity", "upsRapidity", 0.);
+	RooRealVar dimuRapidity("dimuRapidity", "dimuRapidity", 0.); //RooRealVar upsRapidity("upsRapidity", "upsRapidity", 0.);
 	RooCategory QQsign("QQsign", "QQsign");
 	QQsign.defineType("PlusMinus", 0);
 	QQsign.defineType("PlusPlus", 1);
 	QQsign.defineType("MinusMinus", 2);
 	RooRealVar Centrality("Centrality", "Centrality", 0.);
 
-	RooArgSet cols(*mass, muppt, mumpt, upsPt, vProb, upsRapidity, QQsign, Centrality);
+	RooArgSet cols(*mass, muppt, mumpt, dimuPt, vProb, dimuRapidity, QQsign, Centrality); //RooArgSet cols(*mass, muppt, mumpt, upsPt, vProb, upsRapidity, QQsign, Centrality);
 
 	//import HI data
 	TFile * hifile = TFile::Open(HIfilename);
