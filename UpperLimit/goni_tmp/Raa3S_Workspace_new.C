@@ -5,7 +5,6 @@
 #include "RooWorkspace.h"
 #include "RooAbsReal.h"
 #include "RooRealVar.h"
-#include <RooFormulaVar.h>
 #include "RooArgSet.h"
 #include "RooArgList.h"
 #include "RooDataSet.h"
@@ -13,7 +12,6 @@
 #include "RooStats/BayesianCalculator.h"
 #include "RooStats/ModelConfig.h"
 #include "RooStats/SimpleInterval.h"
-#include <RooMinuit.h> //new
 #include "TAxis.h"
 #include <iostream>
 #include <TString.h>
@@ -30,24 +28,23 @@
 #include <TGraph.h>
 #include "TMath.h"
 #include "TF1.h"
+#include <RooMinuit.h>
 
 #include "test_combine.C"
 
 using namespace RooFit;
 using namespace RooStats;
 
-void Raa3S_Workspace(const char* name_pbpb="chad_ws_fits/centFits/ws_PbPbData_262548_263757_0cent10_0.0pt50.0_0.0y2.4.root", const char* name_pp="chad_ws_fits/centFits/ws_PPData_262157_262328_-1cent1_0.0pt50.0_0.0y2.4.root", const char* name_out="fitresult_combo.root"){
+void Raa3S_Workspace_new(const char* name_pbpb="fitresult.root", const char* name_pp="fitresult_pp.root", const char* name_out="fitresult_combo2.root"){
 
-   //TFile File(filename);
+   // TFile File(filename);
 
    //RooWorkspace * ws = test_combine(name_pbpb, name_pp);
-
-   TFile *f = new TFile("fitresult_combo.root") ;
+    TFile *f = new TFile("fitresult_combo.root") ;
    RooWorkspace * ws = (RooWorkspace*) f->Get("wcombo");
-
-   //File.GetObject("wcombo", ws);
-   ws->Print();
-   RooAbsData * data = ws->data("data"); //dataOS, dataSS
+   // File.GetObject("wcombo", ws);
+   // ws->Print();
+   RooAbsData * data = ws->data("data");
 
    // RooDataSet * US_data = (RooDataSet*) data->reduce( "QQsign == QQsign::PlusMinus");
    // US_data->SetName("US_data");
@@ -57,42 +54,41 @@ void Raa3S_Workspace(const char* name_pbpb="chad_ws_fits/centFits/ws_PbPbData_26
    // ws->import(* hi_data);
    // hi_data->Print();
 
-   RooRealVar* raa3 = new RooRealVar("raa3","R_{AA}(#Upsilon (3S))",0.5,-1,1);
-   //RooRealVar* raa3 = ws->var("R_{#frac{3S}{1S}}_hi"); //RooRealVar* nsig3_pp = ws->var("N_{#Upsilon(3S)}_pp");
+   RooRealVar* dubRat = new RooRealVar("dubRat","DoubleRatio(#Upsilon (3S))",0.5,-1,1);
    RooRealVar* leftEdge = new RooRealVar("leftEdge","leftEdge",0);
    RooRealVar* rightEdge = new RooRealVar("rightEdge","rightEdge",1);
-   RooGenericPdf step("step", "step", "(@0 >= @1) && (@0 < @2)", RooArgList(*raa3, *leftEdge, *rightEdge));
+   RooGenericPdf step("step", "step", "(@0 >= @1) && (@0 < @2)", RooArgList(*dubRat, *leftEdge, *rightEdge));
    ws->import(step);
-   ws->factory( "Uniform::flat(raa3)" );
+   ws->factory( "Uniform::flat(dubRat)" );
 
    //pp Luminosities, Taa and efficiency ratios Systematics
 
-   ws->factory( "Taa_hi[5.662e-9]" );
-   ws->factory( "Taa_kappa[1.062]" ); // was 1.057
+   ws->factory( "Taa_hi[1]" );
+   ws->factory( "Taa_kappa[1]" ); // was 1.057
    ws->factory( "expr::alpha_Taa('pow(Taa_kappa,beta_Taa)',Taa_kappa,beta_Taa[0,-5,5])" );
    ws->factory( "prod::Taa_nom(Taa_hi,alpha_Taa)" );
    ws->factory( "Gaussian::constr_Taa(beta_Taa,glob_Taa[0,-5,5],1)" );
 
-   ws->factory( "lumipp_hi[5.4]" );
-   ws->factory( "lumipp_kappa[1.037]" ); // was 1.06
+   ws->factory( "lumipp_hi[1]" );
+   ws->factory( "lumipp_kappa[1]" ); // was 1.06
    ws->factory( "expr::alpha_lumipp('pow(lumipp_kappa,beta_lumipp)',lumipp_kappa,beta_lumipp[0,-5,5])" );
    ws->factory( "prod::lumipp_nom(lumipp_hi,alpha_lumipp)" );
    ws->factory( "Gaussian::constr_lumipp(beta_lumipp,glob_lumipp[0,-5,5],1)" );
 
    // ws->factory( "effRat1[1]" );
    // ws->factory( "effRat2[1]" );
-   ws->factory( "effRat3_hi[0.95]" );
-   ws->factory( "effRat_kappa[1.054]" );
+   ws->factory( "effRat3_hi[1]" );
+   ws->factory( "effRat_kappa[1]" );
    ws->factory( "expr::alpha_effRat('pow(effRat_kappa,beta_effRat)',effRat_kappa,beta_effRat[0,-5,5])" );
    // ws->factory( "prod::effRat1_nom(effRat1_hi,alpha_effRat)" );
    ws->factory( "Gaussian::constr_effRat(beta_effRat,glob_effRat[0,-5,5],1)" );
    // ws->factory( "prod::effRat2_nom(effRat2_hi,alpha_effRat)" );
    ws->factory( "prod::effRat3_nom(effRat3_hi,alpha_effRat)" );
    //  
-   ws->factory("Nmb_hi[1.161e9]");
+   ws->factory("Nmb_hi[1]");
    ws->factory("prod::denominator(Taa_nom,Nmb_hi)");
    ws->factory( "expr::lumiOverTaaNmbmodified('lumipp_nom/denominator',lumipp_nom,denominator)");
-   RooAbsReal *lumiOverTaaNmbmodified = ws->function("lumiOverTaaNmbmodified"); //RooFormulaVar *lumiOverTaaNmbmodified = ws->function("lumiOverTaaNmbmodified");
+   RooFormulaVar *lumiOverTaaNmbmodified = (RooFormulaVar*)ws->function("lumiOverTaaNmbmodified");
    //  
    //  RooRealVar *raa1 = ws->var("raa1");
    //  RooRealVar* nsig1_pp = ws->var("nsig1_pp");
@@ -100,59 +96,71 @@ void Raa3S_Workspace(const char* name_pbpb="chad_ws_fits/centFits/ws_PbPbData_26
    //  RooRealVar *raa2 = ws->var("raa2");
    //  RooRealVar* nsig2_pp = ws->var("nsig2_pp");
    //  RooRealVar* effRat2 = ws->function("effRat2_nom");
-   RooFormulaVar *nsig3f_pp = (RooFormulavar*)ws->function("N_{ #varUpsilon(3S)}_pp");
-   //RooFormulaVar *nsig2f = (RooFormulaVar*)ws->function("N_{ #varUpsilon(2S)}");
-   //RooFormulaVar *nsig3f = (RooFormulaVar*)ws->function("N_{ #varUpsilon(3S)}");
-   //RooRealVar* nsig3_pp = ws->var("R_{#frac{3S}{1S}}_pp"); //RooRealVar* nsig3_pp = ws->function("N_{ #varUpsilon(3S)}_pp");
-   cout << nsig3f_pp << endl;
-   RooAbsReal* effRat3 = ws->function("effRat3_nom"); //RooRealVar* effRat3 = ws->function("effRat3_nom");
+   /*
+   RooRealVar* nsig3_pp = ws->var("N_{#Upsilon(3S)}_pp");
+   cout << nsig3_pp << endl;
+   RooRealVar* effRat3 = ws->function("effRat3_nom");
    //  
    //  RooFormulaVar nsig1_hi_modified("nsig1_hi_modified", "@0*@1*@3/@2", RooArgList(*raa1, *nsig1_pp, *lumiOverTaaNmbmodified, *effRat1));
    //  ws->import(nsig1_hi_modified);
    //  RooFormulaVar nsig2_hi_modified("nsig2_hi_modified", "@0*@1*@3/@2", RooArgList(*raa2, *nsig2_pp, *lumiOverTaaNmbmodified, *effRat2));
    //  ws->import(nsig2_hi_modified);
-   RooRealVar* nsig1f_hi = ws->var("N_{#varUpsilon(1S)}_hi");
-   RooFormulaVar nsig3_hi_modified("nsig3_hi_modified", "@0*@1*@3/@2", RooArgList(*raa3, *nsig3f_pp, *lumiOverTaaNmbmodified, *effRat3));
+   RooFormulaVar _hi_modified("nsig3_hi_modified", "@0*@1*@3/@2", RooArgList(*raa3, *nsig3_pp, *lumiOverTaaNmbmodified, *effRat3));
    ws->import(nsig3_hi_modified);
+   */
+
+   RooRealVar* effRat3 = (RooRealVar*)ws->function("effRat3_nom");
+   RooRealVar* frac3Sv1S_pp = ws->var("R_{#frac{3S}{1S}}_pp");
+   //cout << frac3Sv1S_pp << endl;
+   RooFormulaVar frac3Sv1S_hi_modified("frac3Sv1S_hi_modified", "@0*@1*@3/@2", RooArgList(*dubRat, *frac3Sv1S_pp,*lumiOverTaaNmbmodified,*effRat3));
+   ws->import(frac3Sv1S_hi_modified);
+
+   
 
    //  // background yield with systematics
-   ws->factory( "nbkg_hi_kappa[1.10]" );
+   ws->factory( "nbkg_hi_kappa[1.]" );
    ws->factory( "expr::alpha_nbkg_hi('pow(nbkg_hi_kappa,beta_nbkg_hi)',nbkg_hi_kappa,beta_nbkg_hi[0,-5,5])" );
    ws->factory( "SUM::nbkg_hi_nom(alpha_nbkg_hi*bkgPdf_hi)" );
    ws->factory( "Gaussian::constr_nbkg_hi(beta_nbkg_hi,glob_nbkg_hi[0,-5,5],1)" );
-   RooAbsPdf* sig1S_hi = ws->pdf("sig1S_hi"); //RooAbsPdf* sig1S_hi = ws->pdf("cbcb_hi");
+   RooAbsPdf* sig1S_hi = ws->pdf("sig1S_hi");
    RooAbsPdf* sig2S_hi = ws->pdf("sig2S_hi");
    RooAbsPdf* sig3S_hi = ws->pdf("sig3S_hi");
    RooAbsPdf* LSBackground_hi = ws->pdf("nbkg_hi_nom");
-   RooFormulaVar* nsig2f_hi = (RooFormulavar*)ws->function("N_{ #varUpsilon(2S)}_hi");
-   //RooRealVar* nsig2_hi = ws->var("R_{#frac{2S}{1S}}_hi");
-   //RooAbsReal* nsig3f_hi = ws->function("nsig3_hi_modified"); //RooFormulaVar* nsig3_hi = ws->function("nsig3_hi_modified");
-   RooFormulaVar* nsig3f_hi = ws->function("nsig3_hi_modified"); //RooFormulaVar* nsig3_hi = ws->function("nsig3_hi_modified");
-   //RooRealVar* nsig3_hi = ws->var("R_{#frac{3S}{1S}}_hi");
-   cout << nsig1f_hi << " " << nsig2f_hi << " " << nsig3f_pp << endl;
+   RooRealVar* nsig1_hi = ws->var("N_{#Upsilon(1S)}_hi");
+   
+   RooFormulaVar *nsig2_hi = (RooFormulaVar*)ws->function("N_{ #varUpsilon(2S)}_hi");
+   RooFormulaVar *nsig3_hi = (RooFormulaVar*)ws->function("frac3Sv1S_hi_modified"); 
+ 
+
+   //RooRealVar* nsig2_hi = ws->var("N_{#Upsilon(2S)}_hi");
+   //RooFormulaVar* nsig3_hi = ws->function("nsig3_hi_modified");
+   //cout << nsig1_hi << " " << nsig2_hi << " " << nsig3_pp << endl;
    RooRealVar* norm_nbkg_hi = ws->var("n_{Bkgd}_hi");
 
    RooArgList pdfs_hi( *sig1S_hi,*sig2S_hi,*sig3S_hi, *LSBackground_hi);
-   RooArgList norms_hi(*nsig1f_hi,*nsig2f_hi,*nsig3f_hi, *norm_nbkg_hi);
+   RooArgList norms_hi(*nsig1_hi,*nsig2_hi,*nsig3_hi, *norm_nbkg_hi);
 
    ////////////////////////////////////////////////////////////////////////////////
 
-   ws->factory( "nbkg_pp_kappa[1.03]" );
+   ws->factory( "nbkg_pp_kappa[1.]" );
    ws->factory( "expr::alpha_nbkg_pp('pow(nbkg_pp_kappa,beta_nbkg_pp)',nbkg_pp_kappa,beta_nbkg_pp[0,-5,5])" );
    ws->factory( "SUM::nbkg_pp_nom(alpha_nbkg_pp*bkgPdf_pp)" );
    ws->factory( "Gaussian::constr_nbkg_pp(beta_nbkg_pp,glob_nbkg_pp[0,-5,5],1)" );
-   RooAbsPdf* sig1S_pp = ws->pdf("sig1S_pp"); //RooAbsPdf* sig1S_pp = ws->pdf("cbcb_pp");
+   RooAbsPdf* sig1S_pp = ws->pdf("sig1S_pp");
    RooAbsPdf* sig2S_pp = ws->pdf("sig2S_pp");
    RooAbsPdf* sig3S_pp = ws->pdf("sig3S_pp");
    RooAbsPdf* LSBackground_pp = ws->pdf("nbkg_pp_nom");
-   RooRealVar* nsig1f_pp = ws->var("N_{#varUpsilon(1S)}_pp");
-   RooFormulaVar* nsig2f_pp = (RooFormulavar*)ws->function("N_{ #varUpsilon(2S)}_pp");
-   //RooRealVar* nsig2_pp = ws->var("R_{#frac{2S}{1S}}_pp"); //RooRealVar* nsig2_pp = ws->var("N_{#Upsilon(2S)}_pp");
+ 
+   RooRealVar* nsig1_pp = ws->var("N_{#varUpsilon(1S)}_pp");
+   RooFormulaVar *nsig2_pp = (RooFormulaVar*)ws->function("N_{ #varUpsilon(2S)}"); //RooFormulaVar *nsig2_pp = (RooFormulaVar*)("N_{ #varUpsilon(2S)}_pp");
+   RooFormulaVar *nsig3_pp = (RooFormulaVar*)ws->function("N_{ #varUpsilon(3S)}"); //RooFormulaVar *nsig3_pp = (RooFormulaVar*)("N_{ #varUpsilon(3S)}_pp");
+
+   //RooRealVar* nsig2_pp = ws->var("N_{#Upsilon(2S)}_pp");
    // RooRealVar* nsig3_pp = ws->var("N_{#Upsilon(3S)}_pp");
    RooRealVar* norm_nbkg_pp = ws->var("n_{Bkgd}_pp");
 
    RooArgList pdfs_pp( *sig1S_pp,*sig2S_pp,*sig3S_pp, *LSBackground_pp);
-   RooArgList norms_pp( *nsig1f_pp,*nsig2f_pp,*nsig3f_pp,*norm_nbkg_pp);
+   RooArgList norms_pp( *nsig1_pp,*nsig2_pp,*nsig3_pp,*norm_nbkg_pp);
 
    RooAddPdf model_num("model_num", "model_num", pdfs_hi,norms_hi); 
    ws->import(model_num);
@@ -183,43 +191,46 @@ void Raa3S_Workspace(const char* name_pbpb="chad_ws_fits/centFits/ws_PbPbData_26
    globalObs.add( *ws->var("glob_effRat") );
    globalObs.add( *ws->var("glob_nbkg_hi") );
    globalObs.add( *ws->var("glob_nbkg_pp") );
-   cout << "66666" << endl;
 
+   cout<<"00000000000000000000"<<endl;
    // ws->Print();
 
    RooArgSet poi("poi");
-   poi.add( *ws->var("raa3") );
+   cout<<"111111"<<endl;
+   poi.add( *ws->var("dubRat") );
+   cout<<"222222"<<endl;
 
 
 
-   cout << "77777" << endl;
    // create set of nuisance parameters
    RooArgSet nuis("nuis");
+   cout<<"333333"<<endl;
    nuis.add( *ws->var("beta_lumipp") );
+   cout<<"444444"<<endl;
    nuis.add( *ws->var("beta_nbkg_hi") );
+   cout<<"555555"<<endl;
    nuis.add( *ws->var("beta_nbkg_pp") );
+   cout<<"666666"<<endl;
    nuis.add( *ws->var("beta_Taa") );
+   cout<<"777777"<<endl;
    nuis.add( *ws->var("beta_effRat") );
+   cout<<"888888"<<endl;
 
-   cout << "88888" << endl;
    ws->var("#alpha_{CB}_hi")->setConstant(true);
    ws->var("#alpha_{CB}_pp")->setConstant(true);
    ws->var("#sigma_{CB1}_hi")->setConstant(true);
    ws->var("#sigma_{CB1}_pp")->setConstant(true);
    ws->var("#sigma_{CB2}/#sigma_{CB1}_hi")->setConstant(true);
    ws->var("#sigma_{CB2}/#sigma_{CB1}_pp")->setConstant(true);
-   //ws->var("Centrality")->setConstant(true); //delete
+//   ws->var("Centrality")->setConstant(true);
    ws->var("N_{#varUpsilon(1S)}_hi")->setConstant(true);
    ws->var("N_{#varUpsilon(1S)}_pp")->setConstant(true);
-   //ws->var("N_{#Upsilon(2S)}_hi")->setConstant(true);
-   //ws->var("N_{#Upsilon(2S)}_pp")->setConstant(true);
-   //ws->var("N_{#Upsilon(3S)}_pp")->setConstant(true);
-
-   ws->var("R_{#frac{2S}{1S}}_hi")->setConstant(true); //new
-   ws->var("R_{#frac{2S}{1S}}_pp")->setConstant(true); //new
-   ws->var("R_{#frac{3S}{1S}}_hi")->setConstant(true); //new
-   ws->var("R_{#frac{3S}{1S}}_pp")->setConstant(true); //new
-
+   ws->var("R_{#frac{2S}{1S}}_hi")->setConstant(true);
+   ws->var("R_{#frac{2S}{1S}}_pp")->setConstant(true);
+   ws->var("R_{#frac{3S}{1S}}_pp")->setConstant(true);
+//   ws->var("N_{#Upsilon(2S)}_hi")->setConstant(true);
+//   ws->var("N_{#Upsilon(2S)}_pp")->setConstant(true);
+//   ws->var("N_{#Upsilon(3S)}_pp")->setConstant(true);
    ws->var("Nmb_hi")->setConstant(true);
    // ws->var("QQsign")->setConstant(true);
    ws->var("Taa_hi")->setConstant(true);
@@ -243,17 +254,17 @@ void Raa3S_Workspace(const char* name_pbpb="chad_ws_fits/centFits/ws_PbPbData_26
    ws->var("leftEdge")->setConstant(true);
    ws->var("lumipp_hi")->setConstant(true);
    ws->var("lumipp_kappa")->setConstant(true);
-   ws->var("m_{ #varUpsilon(1S)}_hi")->setConstant(true); //ws->var("mass1S_hi")->setConstant(true);
-   ws->var("m_{ #varUpsilon(1S)}_pp")->setConstant(true); //ws->var("mass1S_pp")->setConstant(true);
+   ws->var("m_{ #varUpsilon(1S)}_hi")->setConstant(true);
+   ws->var("m_{ #varUpsilon(1S)}_pp")->setConstant(true);
    ws->var("muMinusPt")->setConstant(true);
    ws->var("muPlusPt")->setConstant(true);
    ws->var("n_{Bkgd}_hi")->setConstant(true);
    ws->var("n_{Bkgd}_pp")->setConstant(true);
    ws->var("nbkg_hi_kappa")->setConstant(true);
    ws->var("nbkg_pp_kappa")->setConstant(true);
-   //ws->var("n_{CB}")->setConstant(true); //ws->var("n_{CB}")->setConstant(true); //ws->var("npow")->setConstant(true);
-   ws->var("n_{CB}_hi")->setConstant(true); //ws->var("n_{CB}")->setConstant(true); //ws->var("npow")->setConstant(true);
-   ws->var("n_{CB}_pp")->setConstant(true); //ws->var("n_{CB}")->setConstant(true); //ws->var("npow")->setConstant(true);
+   ws->var("n_{CB}_hi")->setConstant(true);
+   ws->var("n_{CB}_pp")->setConstant(true);
+   //ws->var("npow")->setConstant(true);
    // ws->var("raa3")->setConstant(true);
    ws->var("rightEdge")->setConstant(true);
    ws->var("sigmaFraction_hi")->setConstant(true);
@@ -262,7 +273,7 @@ void Raa3S_Workspace(const char* name_pbpb="chad_ws_fits/centFits/ws_PbPbData_26
    ws->var("turnOn_pp")->setConstant(true);
    ws->var("dimuPt")->setConstant(true); //ws->var("upsPt")->setConstant(true);
    ws->var("dimuRapidity")->setConstant(true); //ws->var("upsRapidity")->setConstant(true);
-   ws->var("vProb")->setConstant(true);
+   //ws->var("vProb")->setConstant(true);
    ws->var("width_hi")->setConstant(true);
    ws->var("width_pp")->setConstant(true);
    // ws->var("x3raw")->setConstant(true);
@@ -301,7 +312,6 @@ void Raa3S_Workspace(const char* name_pbpb="chad_ws_fits/centFits/ws_PbPbData_26
    // fixed_again.add( *ws->var("mscale_pp") );
    //  
    // ws->Print();
-   cout << "99999" << endl;
 
    // create signal+background Model Config
    RooStats::ModelConfig sbHypo("SbHypo");
@@ -315,14 +325,10 @@ void Raa3S_Workspace(const char* name_pbpb="chad_ws_fits/centFits/ws_PbPbData_26
 
    // ws->Print();
    /////////////////////////////////////////////////////////////////////
-   RooAbsReal * pNll = sbHypo.GetPdf()->createNLL( *data,NumCPU(10) );
-   cout << "111111" << endl;
+   RooAbsReal * pNll = sbHypo.GetPdf()->createNLL( *data,NumCPU(2) );
    RooMinuit(*pNll).migrad(); // minimize likelihood wrt all parameters before making plots
-   cout << "444444" << endl;
-   RooPlot *framepoi = ((RooRealVar *)poi.first())->frame(Bins(10),Range(0.,0.2),Title("LL and profileLL in raa3"));
-   cout << "222222" << endl;
+   RooPlot *framepoi = ((RooRealVar *)poi.first())->frame(Bins(10),Range(0.,0.2),Title("LL and profileLL in dubRatio"));
    pNll->plotOn(framepoi,ShiftToZero());
-   cout << "333333" << endl;
    
    RooAbsReal * pProfile = pNll->createProfile( globalObs ); // do not profile global observables
    pProfile->getVal(); // this will do fit and set POI and nuisance parameters to fitted values
