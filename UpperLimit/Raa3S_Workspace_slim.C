@@ -35,7 +35,7 @@
 using namespace RooFit;
 using namespace RooStats;
 
-void Raa3S_Workspace_new(const char* name_pbpb="fitresult.root", const char* name_pp="fitresult_pp.root", const char* name_out="fitresult_combo2.root"){
+void Raa3S_Workspace_slim(const char* name_pbpb="fitresult.root", const char* name_pp="fitresult_pp.root", const char* name_out="fitresult_combo2.root"){
 
    // TFile File(filename);
 
