@@ -1,6 +1,6 @@
 #include <algorithm>
 
-void runLimit_RaaNS_Workspace(const char *filename="TRIAL.root", const char *poiname="raa3", const char *pdfname="joint", const char *wsname="wcombo");
+void runLimit_RaaNS_Workspace(const char *filename="fitresult_combo2.root", const char *poiname="dubRat", const char *pdfname="joint", const char *wsname="wcombo");
 
 #include "StandardHypoTestInvDemo.C"
 
@@ -41,7 +41,7 @@ void runLimit_RaaNS_Workspace(const char *filename, const char *poiname, const c
    LikelihoodInterval* interval = pl.GetInterval();
    LikelihoodIntervalPlot plot(interval);
    TCanvas c4; c4.cd(); 
-   plot.SetRange(0.,0.2,0.05,3.);
+   plot.SetRange(0.,1,0.05,3.);
    // plot.Draw();
    TLatex latexCI;
    latexCI.SetNDC();
@@ -98,7 +98,7 @@ void runLimit_RaaNS_Workspace(const char *filename, const char *poiname, const c
    //
 
    // 0,3,true for frequentist CLs; 2,3,true for asymptotic CLs; 0,2,false for FC
-   int calculatorType = 0;
+   int calculatorType = 2;
    int testStatType = 2;
    bool useCLs = false;
    // root> StandardHypoTestInvDemo("fileName","workspace name","S+B modelconfig name","B model name","data set name",calculator type, test statistic type, use CLS, 

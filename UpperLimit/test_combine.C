@@ -77,8 +77,8 @@ RooWorkspace* test_combine(const char* name_pbpb="fitresult.root", const char* n
    RooRealVar *nsig1f = ws->var("N_{#varUpsilon(1S)}");
    RooRealVar *nbkgd = ws->var("n_{Bkgd}");
    //RooFormulaVar *nsig2f = new RooFormulaVar("N_{ #varUpsilon(2S)}","@0*@1", RooArgList(*nsig1f,*f2Svs1S));
-   RooFormulaVar *nsig2f = (RooFormulaVar*)ws->function("N_{ #varUpsilon(2S)}");
-   RooFormulaVar *nsig3f = (RooFormulaVar*)ws->function("N_{ #varUpsilon(3S)}");
+   RooFormulaVar *nsig2f = (RooFormulaVar*)ws->function("N_{#varUpsilon(2S)}");
+   RooFormulaVar *nsig3f = (RooFormulaVar*)ws->function("N_{#varUpsilon(3S)}");
    //RooFormulaVar *nsig3f = new RooFormulaVar("N_{ #varUpsilon(3S)}","@0*@1", RooArgList(*nsig1f,*f3Svs1S));
   
    //Currently unused for this analysis
