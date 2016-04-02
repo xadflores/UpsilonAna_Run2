@@ -272,8 +272,8 @@ void EffPbPb1S(){      // Change function name
 			 if(qq4mom->Pt()>3 && qq4mom->Pt()<6){ptWeight = ptWeightArr[1];}
 			 if(qq4mom->Pt()>6 && qq4mom->Pt()<12){ptWeight = ptWeightArr[2];}
 			 if(qq4mom->Pt()>12){ptWeight = ptWeightArr[3];}
-			 weight = ptWeight;
-			 //weight = centWeight*ptWeight;
+			 weight = centWeight*ptWeight;
+
 			bool L1Pass=0;
 
 			if (Reco_QQ_sign[iQQ]==0 && acceptMu && mupl_cut && mumi_cut && trigL1Dmu){L1Pass=1;}
@@ -283,7 +283,6 @@ void EffPbPb1S(){      // Change function name
 				if(qq4mom->Pt()>(ptBin[i]-ptBinErr[i]) && qq4mom->Pt()<(ptBin[i]+ptBinErr[i])){
 					if(L1Pass == 1 && PtCutPass ==1 && MassCutPass == 1){RecoEvents->Fill(qq4mom->Pt(),weight);}
 				}
-	//		cout<<"Reco bin: "<<i<<" value:  "<<RecoEvents->GetBinContent(i)<< endl;
 			}	       //*/
 //			 if(L1Pass == 1 && PtCutPass ==1 && MassCutPass == 1){RecoEvents->Fill(qq4mom->Pt(),weight);}
 
@@ -342,8 +341,7 @@ void EffPbPb1S(){      // Change function name
 			 if(qq4mom->Pt()>3 && qq4mom->Pt()<6){ptWeight = ptWeightArr[1];}
                          if(qq4mom->Pt()>6 && qq4mom->Pt()<12){ptWeight = ptWeightArr[2];}
                          if(qq4mom->Pt()>12){ptWeight = ptWeightArr[3];}
-			 weight = ptWeight;
-			 //weight = centWeight*ptWeight;
+			 weight = centWeight*ptWeight;
 //			bool L1Pass=0;
 //			bool L3Pass=0;
 //			if (acceptMu){L1Pass=1;}
@@ -354,12 +352,8 @@ void EffPbPb1S(){      // Change function name
 				if(qq4mom->Pt()>(ptBin[i]-ptBinErr[i]) && qq4mom->Pt()<(ptBin[i]+ptBinErr[i])){
 					if(acceptMu == 1 && PtCutPass == 1 && MassCutPass == 1){GenEvents->Fill(qq4mom->Pt(), weight);}
 				}
-			//cout<<"Gen bin: "<<i<<" value:  "<<GenEvents->GetBinContent(i)<< endl;
 			}    //*/
 			//if(acceptMu == 1 && PtCutPass == 1 && MassCutPass == 1){GenEvents->Fill(qq4mom->Pt(), weight);}
-			//for(int i = 0; i<nPtBin;i++){			
-	//		cout<<"Gen bin: "<<i<<" value:  "<<GenEvents->GetBinContent(i)<< endl;
-			//}
 		}
 
 
@@ -497,7 +491,7 @@ TFile* fppEff1S = new TFile("ppEff1S.root", "Open");
 //	TrigEff->SetMarkerColor(2);
 	TrigEff->GetYaxis()->SetTitle("EfficiencyPbPb(Upsilon(1S))");
 	TrigEff->GetXaxis()->SetTitle("p^{#mu+#mu-}_{T}");
-	TrigEff->GetYaxis()->SetRangeUser(0.7,.85);
+	TrigEff->GetYaxis()->SetRangeUser(0.6,.9);
 
 	TrigEff->Draw("AP");	// */
 	c1->Update();
