@@ -1,30 +1,12 @@
-#include <TH1.h>
-#include <TH2.h>
-#include <TH2D.h>
-#include <TBranch.h>
-#include <TCanvas.h>
-#include "TClonesArray.h"
-#include <TDirectory.h>
-#include <TFile.h>
-#include "TH1F.h"
-#include <TLatex.h>
-#include <TLegend.h>
-#include "TLorentzVector.h"
-#include <TMath.h>
-#include "TRandom.h"
-#include <TStyle.h>
-#include <TSystem.h>
-#include "TTree.h"
-#include "TString.h"
-#include "TChain.h"
-#include "TGraphErrors.h"
-#include <fstream>
-#include <map>
-#include <iostream>
-#include <stdio.h>
-#include <stdio.h>
-#include <string.h>
-#include <vector>
+//Making code a littler cleaner
+#include "effCommon.h"
+
+
+
+
+
+
+
 
 double RError(double A, double eA, double B, double eB);
 double PError(double A, double eA, double B, double eB);
@@ -38,8 +20,9 @@ double m2S_high = 10.563;
 
 void SingleRatiopp2S1S(){
 	cout<<"Started code"<<endl;
-        gStyle->SetOptStat(000000000);
-        gStyle->SetOptFit(0);//*/
+        gROOT->Macro("logon.C+");
+/*        gStyle->SetOptStat(000000000);
+        gStyle->SetOptFit(0);
         gStyle->SetEndErrorSize(5);
         gStyle->SetLineWidth(2);
 
@@ -51,7 +34,7 @@ void SingleRatiopp2S1S(){
         gStyle->SetFrameBorderMode(0);
         gStyle->SetFrameFillColor(kWhite);
         gStyle->SetPalette(1, 0);
-        gStyle->SetTitleSize(0.05, "t"); 
+        gStyle->SetTitleSize(0.05, "t"); */
 	cout<<"set styles"<<endl;
 
         double          ptBin[nPtBin] = {2.5,8.5,21};   //  RapBin
@@ -81,7 +64,7 @@ void SingleRatiopp2S1S(){
         fppEff2S->GetObject("Gen", hGenNum);
 	fppEff2S->GetObject("Eff", hEffNum);
 
-        fppEff2S->Close();
+     //   fppEff2S->Close(); //closing before using. deleting from memory?
 	cout<<"Loaded 2S efficiencies"<<endl;
 
 ////////// pp 1S
@@ -91,7 +74,7 @@ void SingleRatiopp2S1S(){
         fppEff1S->GetObject("Gen", hGenDen);
         fppEff1S->GetObject("Eff", hEffDen);
 
-        fppEff1S->Close();
+       // fppEff1S->Close(); //closing before using. deleting from memory?
 
 
 ///////// Single Ratio 2S/1S Calculation
@@ -102,8 +85,10 @@ void SingleRatiopp2S1S(){
         double EffDenErrH;
         double EffNumErrL;
         double EffDenErrL;
-        double EffDen;;
-
+        double EffDen;
+        //previously not defined
+	double EffRatioErrH;
+        double EffRatioErrL;
 
 //                hEffRatio->Divide(hEffNum, hEffDen);
 
@@ -122,7 +107,7 @@ void SingleRatiopp2S1S(){
 		EffRatio = EffNum / EffDen;
 		cout<<"Calculated ratio of efficiencies"<<endl;
                 EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrH);  //Calculation for the combined efficiency	
-                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenEffL);
+                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL); //typo EffL -> ErrL
 		cout<<"Calculated error ratios"<<endl;
 
                 hEffpp2S1S->SetPoint((i - 1), ptBin[i - 1], EffRatio);
@@ -138,25 +123,33 @@ void SingleRatiopp2S1S(){
 //        OutFile->Close();
 
 
-        TCanvas* can1 = new TCanvas("can1", "Canvas with results1", 1000, 680);
+        TCanvas* can1 = new TCanvas("can1", "Canvas with results1", 600, 600);
 
-        hEffpp2S1S->SetMarkerSize(2.0);
+	//adding a line
+	TLine* line1 = new TLine(0,1,30,1);
+        line1->SetLineStyle(kDashed);
+
+        hEffpp2S1S->SetMarkerSize(1.2);
         hEffpp2S1S->SetMarkerColor(kRed);
         hEffpp2S1S->SetMarkerStyle(21);
 	hEffpp2S1S->SetLineColor(kRed);
-        hEffpp2S1S->GetXaxis()->SetTitle("p_{T}");
+        hEffpp2S1S->GetXaxis()->SetTitle("p^{#mu+#mu-}_{T}");
+        hEffpp2S1S->GetXaxis()->CenterTitle();
 
-	hEffpp2S1S->GetYaxis()->SetTitle("Efficiency pp 2S/1S");
-	hEffpp2S1S->GetYaxis()->SetRangeUser(0.5, 1.5);
-	hEffpp2S1S->GetXaxis()->SetTitleSize(0.05);
-	hEffpp2S1S->GetXaxis()->SetTitleOffset(0.9);
-	hEffpp2S1S->GetYaxis()->SetTitleSize(0.05);
-	hEffpp2S1S->GetYaxis()->SetTitleOffset(0.9);
-	hEffpp2S1S->Draw("");
-
+	hEffpp2S1S->GetYaxis()->SetTitle("Efficiency[#varUpsilon(2S)/#varUpsilon(1S)]_{pp}");
+	hEffpp2S1S->GetYaxis()->SetRangeUser(0.0, 1.2);
+	hEffpp2S1S->GetXaxis()->SetRangeUser(0.0, 30.0);
+	//hEffpp2S1S->GetXaxis()->SetTitleSize(0.05);
+	hEffpp2S1S->GetXaxis()->SetTitleOffset(1.5);
+	//hEffpp2S1S->GetYaxis()->SetTitleSize(0.05);
+	hEffpp2S1S->GetYaxis()->SetTitleOffset(1.5);
+	hEffpp2S1S->Draw("AP");
+	line1->Draw("SAME");
 	  
         cout << "over" << endl;
-
+	
+	fppEff1S->Close(); 
+	fppEff2S->Close(); 
 
 /*
         TCanvas* can2 = new TCanvas("can2", "Canvas with results2", 1000, 680);

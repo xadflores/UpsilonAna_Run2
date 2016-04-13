@@ -1,31 +1,8 @@
-#include <TH1.h>
-#include <TH2D.h>
-#include <TBranch.h>
-#include <TCanvas.h>
-#include "TClonesArray.h"
-#include <TDirectory.h>
-#include <TFile.h>
-#include "TH1F.h"
-#include <TLatex.h>
-#include <TLegend.h>
-#include "TLorentzVector.h"
-#include <TMath.h>
-#include "TRandom.h"
-#include <TStyle.h>
-#include <TSystem.h>
-#include "TTree.h"
-#include "TString.h"
-#include "TChain.h"
-#include "TEfficiency.h"
-#include "TGraphErrors.h"
-#include "TGraphAsymmErrors.h"
-// miscellaneous  
-#include <fstream>
-#include <map>
-#include <iostream>
-#include <stdio.h>
-#include <string.h>
-#include <vector>
+
+
+//Making Code a little cleaner
+#include "effCommon.h"
+
 
 //Macro to check L1/L3 ratio of 1S vs. pt in PbPb. 
 //run as follows:
@@ -66,9 +43,10 @@ double pp2S_constant = 0.69;
 void Effpp2S(){
 
 	gStyle->SetOptStat(0);
-
+        gROOT->Macro("logon.C+");
 	TChain myTree("hionia/myTree");   // Change source of tree
-	myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/pp_MC_Official/OniaTree_Ups2SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
+	//myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/pp_MC_Official/OniaTree_Ups2SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
+	myTree.Add("OniaTree_Ups2SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
 
 	Float_t         muMiDxy;
 	Float_t         muMiDz;
@@ -88,7 +66,7 @@ void Effpp2S(){
         double          ptBin[nPtBin] = {2.5,8.5,21};   //  RapBin
         double          ptBinErr[nPtBin] = {2.5,3.5,9};
         Float_t         ptBinEdges[nPtBin+1] = {0.0,5.0,12.0,30.0};
-        double          ptReweight;
+        double          ptReweight = 0;
 
 	Int_t           Centrality; 
 	ULong64_t       HLTriggers;
@@ -335,11 +313,11 @@ void Effpp2S(){
 
 
 
-
+/*
 //From Ota
 	//gStyle->SetOptStat(1111);
         gStyle->SetOptStat(000000000);
-        gStyle->SetOptFit(0);//*/
+        gStyle->SetOptFit(0);//
         gStyle->SetEndErrorSize(5);
         gStyle->SetLineWidth(2);
         //gStyle->SetErrorX(0);
@@ -353,10 +331,10 @@ void Effpp2S(){
         gStyle->SetFrameFillColor(kWhite);
         gStyle->SetPalette(1, 0);
         gStyle->SetTitleSize(0.05, "t");
+*/
 
 
-
-TCanvas *c1 = new TCanvas("c1","c1",600,400);
+TCanvas *c1 = new TCanvas("c1","c1",600,600);
 
 
 //From Ota
@@ -411,9 +389,15 @@ TCanvas *c1 = new TCanvas("c1","c1",600,400);
 	TrigEff->SetTitle("");
 //	TrigEff->SetMarkerStyle(21);
 //	TrigEff->SetMarkerColor(2);
-	TrigEff->GetYaxis()->SetTitle("Efficiencypp(Upsilon(2S))");
-	TrigEff->GetXaxis()->SetTitle("p^{#mu+#mu-}_{T}");
-	TrigEff->GetYaxis()->SetRangeUser(0,1);
+        TrigEff->GetYaxis()->SetTitle("Efficiency[#varUpsilon(2S)]_{pp}");
+        TrigEff->GetYaxis()->SetTitleOffset(1.5);
+        TrigEff->GetYaxis()->SetRangeUser(0,1);
+        TrigEff->GetXaxis()->SetTitle("p^{#mu+#mu-}_{T}");
+        TrigEff->GetXaxis()->SetTitleOffset(1.5);
+        TrigEff->GetXaxis()->CenterTitle();
+        TrigEff->GetXaxis()->SetRangeUser(0,30);
+
+
 
 	TrigEff->Draw("AP");	// */
 	c1->Update();
