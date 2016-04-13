@@ -45,8 +45,7 @@ void Effpp2S(){
 	gStyle->SetOptStat(0);
         gROOT->Macro("logon.C+");
 	TChain myTree("hionia/myTree");   // Change source of tree
-	//myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/pp_MC_Official/OniaTree_Ups2SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
-	myTree.Add("OniaTree_Ups2SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
+	myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/pp_MC_Official/OniaTree_Ups2SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
 
 	Float_t         muMiDxy;
 	Float_t         muMiDz;
