@@ -102,18 +102,22 @@ void DoubleRatioCen(){
         hEffDoubleRatio->SetMarkerColor(kRed);
         hEffDoubleRatio->SetMarkerStyle(21);
 	hEffDoubleRatio->SetLineColor(kRed);
-        hEffDoubleRatio->GetXaxis()->SetTitle("Centrality");
+        hEffDoubleRatio->GetXaxis()->SetTitle("Centrality^{#mu+#mu-}");
         hEffDoubleRatio->GetXaxis()->CenterTitle();
 
-	hEffDoubleRatio->GetYaxis()->SetTitle("Efficiency[#varUpsilon(2S)/#varUpsilon(1S)]_{PbPb}/Efficiency[#varUpsilon(2S)/#varUpsilon(1S)]_{pp}");
+	hEffDoubleRatio->GetYaxis()->SetTitle("Efficiency[#varUpsilon(2S)]/Efficiency[#varUpsilon(1S)]_{PbPb}/Efficiency[#varUpsilon(2S)]/Efficiency[#varUpsilon(1S)]_{pp}");
 	hEffDoubleRatio->GetYaxis()->SetRangeUser(0.5, 1.5);
 //	hEffDoubleRatio->GetXaxis()->SetRangeUser(0.0, 30.0);
 	hEffDoubleRatio->GetXaxis()->SetTitleSize(0.05);
 	hEffDoubleRatio->GetXaxis()->SetTitleOffset(0.9);
-	hEffDoubleRatio->GetYaxis()->SetTitleSize(0.04);
-	hEffDoubleRatio->GetYaxis()->SetTitleOffset(0.9);
+	hEffDoubleRatio->GetYaxis()->SetTitleSize(0.03);
+	hEffDoubleRatio->GetYaxis()->SetTitleOffset(1.0);
 	hEffDoubleRatio->Draw("AP");
 	line1->Draw("SAME");
+
+        can1->Update();
+        can1->SaveAs("DoubleRatioVsCen.png");
+
 	  
         cout << "over" << endl;
 	
