@@ -1,5 +1,4 @@
 #include <TH1.h>
-#include <TF1.h>
 #include <TH2D.h>
 #include <TBranch.h>
 #include <TCanvas.h>
@@ -53,28 +52,27 @@ bool PtCut(TLorentzVector* Muon);
 bool MassCut(TLorentzVector* DiMuon, double LowM, double HighM);
 double PtReweight(TLorentzVector* DiMuon, double coefficient, double constant);
 
-
-const int  nPtBin = 3;      // Need to use RapBin for rapidity
+const int  nPtBin = 2;      // Need to use RapBin for rapidity
+const int nCenBin = 9;
 const double muonPtCut = 4.0;
 double m1S_low = 7.77;
 double m1S_high = 10;
 double m2S_low = 8.333;
 double m2S_high = 10.563;
-double PbPb1S_coefficient = -0.015;
-double PbPb1S_constant = 1.08;
+double PbPb2S_coefficient = 0.10;
+double PbPb2S_constant = 0.68;
 
-
-void EffPbPb1S(){      // Change function name
+void EffCenPbPb2S(){      // Change function name
 
 	gStyle->SetOptStat(0);
 
 	TChain myTree("hionia/myTree");   // Change source of tree
-	myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_00_03_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");   //  Change tree being added (Different for pp1S, pp2S, PbPb1S, PbPb2S)
-        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_03_06_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_06_09_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_09_12_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_12_15_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_15_30_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups2SMM_ptUps2S_00_03_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");   //  Change tree being added (Different for pp1S, pp2S, PbPb1S, PbPb2S)
+        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups2SMM_ptUps2S_03_06_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups2SMM_ptUps2S_06_09_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups2SMM_ptUps2S_09_12_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups2SMM_ptUps2S_12_15_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups2SMM_ptUps2S_15_inf_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
 
 	Float_t         muMiDxy;
 	Float_t         muMiDz;
@@ -87,13 +85,16 @@ void EffPbPb1S(){      // Change function name
 	Int_t           muPlNTrkLayers;
 	Bool_t          muPlGoodMu;
 	Float_t         vProb;
+
 	double          ptWeight; 
-	double          ptWeightArr[6]={3.10497,4.11498,2.2579,1.2591,0.567094,0.783399};
-	int             centWeight;
-        double          ptBin[nPtBin] = {2.5,8.5,21};   //  RapBin
-        double          ptBinErr[nPtBin] = {2.5,3.5,9};
-        Float_t         ptBinEdges[nPtBin+1] = {0.0,5.0,12.0,30.0};
-	double		ptReweight;
+	double          ptWeightArr[6] = {5.89168,9.08207,3.106,1.10018,0.534916,0.776183};
+	double          centWeight;
+	double          ptBin[nPtBin] = {1.5,4.5};   //  RapBin
+	double          ptBinErr[nPtBin] = {1.5,1.5};  // RapBinErr
+	double          CenBin[nCenBin] = {5,15,30,50,70,90,110,130,150};
+        double          CenBinErr[nCenBin] = {5,5,10,10,10,10,10,10,10};
+	Float_t		CenBinEdges[nCenBin+1] = {0,10,20,40,60,80,100,120,140,160};
+        double          ptReweight;
 
 	Int_t           Centrality; 
 	ULong64_t       HLTriggers;
@@ -203,14 +204,14 @@ void EffPbPb1S(){      // Change function name
 	myTree.SetBranchAddress("Gen_QQ_mumi_4mom", &Gen_QQ_mumi_4mom, &b_Gen_QQ_mumi_4mom);
 
 
-	TH1D  *RecoEvents=new TH1D("RecoEvents","Reconstructed", nPtBin, ptBinEdges);
+	TH1D  *RecoEvents=new TH1D("RecoEvents","Reconstructed", nCenBin,CenBinEdges);
 
-	TH1D  *GenEvents=new TH1D("GenEvents","Generated", nPtBin, ptBinEdges);
+	TH1D  *GenEvents=new TH1D("GenEvents","Generated", nCenBin,CenBinEdges);
 
   	RecoEvents->Sumw2();
         GenEvents->Sumw2();
 
-	TH1D* hEff = new TH1D("Eff", "", nPtBin, ptBinEdges);
+	TH1D* hEff = new TH1D("Eff", "", nCenBin, CenBinEdges);
 
 
 
@@ -257,40 +258,42 @@ void EffPbPb1S(){      // Change function name
 			//check if muons are in acceptance
 			if(IsAccept(mupl4mom) && IsAccept(mumi4mom)){acceptMu = 1;}
 			if (PtCut(mupl4mom) && PtCut(mumi4mom)){ PtCutPass = 1; }
-			MassCutPass = MassCut(qq4mom, m1S_low, m1S_high);			
+			MassCutPass = MassCut(qq4mom, m2S_low, m2S_high);			
 
 			//check if trigger bit is matched to dimuon
 			if((HLTriggers&1)==1 && (Reco_QQ_trig[iQQ]&1)==1){trigL1Dmu = 1;}
 
 			//weights only needed for PbPb
-			 double weight = 0.0;
-			 ptWeight=0.0;
+			 double weight = 0;
+			 ptWeight=0;
 			 centWeight = FindCenWeight(Centrality);
-			 if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
+                         if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
                          if(qq4mom->Pt()>3 && qq4mom->Pt()<=6){ptWeight = ptWeightArr[1];}
                          if(qq4mom->Pt()>6 && qq4mom->Pt()<=9){ptWeight = ptWeightArr[2];}
-                         if(qq4mom->Pt()>9 && qq4mom->Pt()<=12){ptWeight = ptWeightArr[3];} 
-			 if(qq4mom->Pt()>12 && qq4mom->Pt()<=15){ptWeight = ptWeightArr[4];} 
-			 if(qq4mom->Pt()>15 && qq4mom->Pt()<=30){ptWeight = ptWeightArr[5];} 
-			 if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, PbPb1S_coefficient, PbPb1S_constant);}
+                         if(qq4mom->Pt()>9 && qq4mom->Pt()<=12){ptWeight = ptWeightArr[3];}
+                         if(qq4mom->Pt()>12 && qq4mom->Pt()<=15){ptWeight = ptWeightArr[4];}
+                         if(qq4mom->Pt()>15 && qq4mom->Pt()<=30){ptWeight = ptWeightArr[5];}
+			 if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, PbPb2S_coefficient, PbPb2S_constant);}
                          weight = centWeight*ptWeight*ptReweight;
-//			 weight = centWeight*ptWeight;			
+
 			bool L1Pass=0;
 
 			if (Reco_QQ_sign[iQQ]==0 && acceptMu && mupl_cut && mumi_cut && trigL1Dmu){L1Pass=1;}
 
-                        if(TMath::Abs(qq4mom->Rapidity())<2.4 && Centrality < 160){
-			for(int i = 0; i<nPtBin;i++){
-				if(qq4mom->Pt()>(ptBin[i]-ptBinErr[i]) && qq4mom->Pt()<(ptBin[i]+ptBinErr[i])){
-					if(L1Pass == 1 && PtCutPass ==1 && MassCutPass == 1){RecoEvents->Fill(qq4mom->Pt(),weight);}
-				}
-			}	       //*/
-//			 if(L1Pass == 1 && PtCutPass ==1 && MassCutPass == 1){RecoEvents->Fill(qq4mom->Pt(),weight);}
+			if(TMath::Abs(qq4mom->Rapidity())<2.4 && qq4mom->Pt()<30){
+			for(int i = 0; i<nCenBin;i++){
+				if(Centrality>(CenBin[i]-CenBinErr[i]) && Centrality<(CenBin[i]+CenBinErr[i])){
+					if(L1Pass == 1 && PtCutPass ==1 && MassCutPass == 1){RecoEvents->Fill(Centrality, weight);}
+				}    
+			}        //  */
+//			if(L1Pass == 1 && PtCutPass ==1 && MassCutPass == 1){RecoEvents->Fill(Centrality, weight);}
 			}
+		
+
 	}
 
 
-		//Dinonminator loop
+		//Denominator loop
 		for (int iQQ=0; iQQ<Gen_QQ_size;iQQ++){
 			TLorentzVector *qq4mom = (TLorentzVector*) Gen_QQ_4mom->At(iQQ);
 			TLorentzVector *mumi4mom = (TLorentzVector*) Gen_QQ_mumi_4mom->At(iQQ);
@@ -327,32 +330,41 @@ void EffPbPb1S(){      // Change function name
 			//check if muons are in acceptance
 			if(IsAccept(mupl4mom) && IsAccept(mumi4mom)){acceptMu = 1;}
 			if (PtCut(mupl4mom) && PtCut(mumi4mom)){ PtCutPass = 1; }
-			MassCutPass = MassCut(qq4mom, m1S_low, m1S_high);
+			MassCutPass = MassCut(qq4mom, m2S_low, m2S_high);
 
 
+			//check if trigger bit is matched to dimuon
+//			if((HLTriggers&1)==1){trigL1Dmu = 1;}
+//			if((HLTriggers&262144)==262144 && (Gen_QQ_trig[iQQ]&262144)==262144){trigL3Dmu = 1;}
 
 			//weights only needed for PbPb
-			 double weight = 0.0;
-			 ptWeight=0.0;
+			 double weight = 0;
+			 ptWeight=0;
 			 centWeight = FindCenWeight(Centrality);
-			 if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
+                         if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
                          if(qq4mom->Pt()>3 && qq4mom->Pt()<=6){ptWeight = ptWeightArr[1];}
                          if(qq4mom->Pt()>6 && qq4mom->Pt()<=9){ptWeight = ptWeightArr[2];}
-                         if(qq4mom->Pt()>9 && qq4mom->Pt()<=12){ptWeight = ptWeightArr[3];}  
+                         if(qq4mom->Pt()>9 && qq4mom->Pt()<=12){ptWeight = ptWeightArr[3];}
                          if(qq4mom->Pt()>12 && qq4mom->Pt()<=15){ptWeight = ptWeightArr[4];}
                          if(qq4mom->Pt()>15 && qq4mom->Pt()<=30){ptWeight = ptWeightArr[5];}
-			 if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, PbPb1S_coefficient, PbPb1S_constant);}
-			 weight = centWeight*ptWeight*ptReweight;
-//			 weight = centWeight*ptWeight;
+			 if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, PbPb2S_coefficient, PbPb2S_constant);}
+                         weight = centWeight*ptWeight*ptReweight;
 
-                        if(TMath::Abs(qq4mom->Rapidity())<2.4 && Centrality < 160){
-			for(int i = 0; i<nPtBin;i++){
-				if(qq4mom->Pt()>(ptBin[i]-ptBinErr[i]) && qq4mom->Pt()<(ptBin[i]+ptBinErr[i])){
-					if(acceptMu == 1 && PtCutPass == 1 && MassCutPass == 1){GenEvents->Fill(qq4mom->Pt(), weight);}
+//			bool L1Pass=0;
+//			bool L3Pass=0;
+//			if (acceptMu){L1Pass=1;}
+//			if (acceptMu){L3Pass=1;}
+			
+			if(TMath::Abs(qq4mom->Rapidity())<2.4 && qq4mom->Pt()<30){
+			for(int i = 0; i<nCenBin;i++){
+                                if(Centrality>(CenBin[i]-CenBinErr[i]) && Centrality<(CenBin[i]+CenBinErr[i])){
+					if(acceptMu == 1 && PtCutPass == 1 && MassCutPass == 1){GenEvents->Fill(Centrality, weight);}
 				}
-			}    //*/
-			//if(acceptMu == 1 && PtCutPass == 1 && MassCutPass == 1){GenEvents->Fill(qq4mom->Pt(), weight);}
+			}    // */
+
+//              	if((acceptMu == 1) && (PtCutPass == 1) && (MassCutPass == 1)){GenEvents->Fill(Centrality,weight);}
 			}
+
 		}
 
 
@@ -388,16 +400,34 @@ TCanvas *c1 = new TCanvas("c1","c1",600,400);
 
 //     	 RecoEvents->Sumw2();
 //         GenEvents->Sumw2();
-         hEff->Divide(RecoEvents, GenEvents);
+       	  hEff->Divide(RecoEvents, GenEvents);
+//         TEfficiency* eEff = new TEfficiency(*RecoEvents, *GenEvents);
+//         eEff->SetName("eEff");
 
 //	 hEff->Draw();
+
+/*         hReco_rap_pT_0_30->Sumw2();
+         hGen_rap_pT_0_30->Sumw2();
+         hEff_rap_pT_0_30->Divide(hReco_rap_pT_0_30, hGen_rap_pT_0_30);
+
+         TEfficiency* eEff_rap_pT_0_30 = new TEfficiency(*hReco_rap_pT_0_30, *hGen_rap_pT_0_30);
+         eEff_rap_pT_0_30->SetName("eEff_rap_pT_0_30");
+
+
+         hReco_rap_pT_30_100->Sumw2();
+         hGen_rap_pT_30_100->Sumw2();
+         hEff_rap_pT_30_100->Divide(hReco_rap_pT_30_100, hGen_rap_pT_30_100);
+
+         TEfficiency* eEff_rap_pT_30_100 = new TEfficiency(*hReco_rap_pT_30_100, *hGen_rap_pT_30_100);
+         eEff_rap_pT_30_100->SetName("eEff_rap_pT_30_100");
+*/
 
 
 
    ///////////
  TFile* MyFileEff;
 //  if (Switch_1S2S == 1){
-          MyFileEff = new TFile("PbPbEff1S.root", "Recreate");
+          MyFileEff = new TFile("CenPbPbEff2S.root", "Recreate");
 //  }
 //  if (Switch_1S2S == 2){
 //          MyFileEff = new TFile("PbPbEff2S.root", "Recreate");
@@ -408,18 +438,11 @@ TCanvas *c1 = new TCanvas("c1","c1",600,400);
 //  if (Switch_1S2S == 4){
 //          MyFileEff = new TFile("ppEff2S.root", "Recreate");
 //  }
-  RecoEvents->Write();
-  GenEvents->Write();
   hEff->Write();
-
 
   MyFileEff->Close();
 
 //////////// */ //
-
-
-
-
 
 
 //	TCanvas *c1 = new TCanvas("c1","c1",600,400);
@@ -434,16 +457,16 @@ TCanvas *c1 = new TCanvas("c1","c1",600,400);
         TrigEff->SetMarkerStyle(20);
         TrigEff->SetLineColor(kBlue);
 
-	TrigEff->SetTitle("");
+	TrigEff->SetTitle("2S");
 //	TrigEff->SetMarkerStyle(21);
 //	TrigEff->SetMarkerColor(2);
-	TrigEff->GetYaxis()->SetTitle("EfficiencyPbPb(Upsilon(1S))");
-	TrigEff->GetXaxis()->SetTitle("p^{#mu+#mu-}_{T}");
+	TrigEff->GetYaxis()->SetTitle("EfficiencyPbPb(Upsilon(2S))");
+	TrigEff->GetXaxis()->SetTitle("Centrality");
 	TrigEff->GetYaxis()->SetRangeUser(0,1);
 
 	TrigEff->Draw("AP");	// */
 	c1->Update();
-	c1->SaveAs("EfficiencyVsPtUpsilonPbPb1S.png");
+	c1->SaveAs("EfficiencyVsCentralityUpsilonPbPb2S.png");
 
 }
 
@@ -492,19 +515,9 @@ bool MassCut(TLorentzVector* DiMuon, double LowM, double HighM){
 }
 
 double PtReweight(TLorentzVector* DiMuon, double coefficient, double constant){
-	double f = coefficient*(DiMuon->Pt()) + constant;
-	return f;
+        double f = coefficient*(DiMuon->Pt()) + constant;
+        return f;
 }
-
-/*
-double PtReweight(TLorentzVector* DiMuon){
-	TF1* f = new TF1("f","[0]*x+[1]",0.,30.);
-	f->SetParameter(0,-0.015);
-	f->SetParameter(1,1.08);
-	double temp = DiMuon->Pt();
-	return f->Eval(temp);	
-}      // */
-
 
 
 //this re weights centrality dist. 

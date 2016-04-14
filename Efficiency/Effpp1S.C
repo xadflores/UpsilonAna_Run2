@@ -310,26 +310,6 @@ void Effpp1S(){
 
 	}
 
-/*
-//From Ota
-	//gStyle->SetOptStat(1111);
-       gStyle->SetOptStat(000000000);
-        gStyle->SetOptFit(0);//
-        gStyle->SetEndErrorSize(5);
-        gStyle->SetLineWidth(2);
-        //gStyle->SetErrorX(0);
-
-        gStyle->SetLabelFont(62, "xyz");
-        gStyle->SetTitleFont(62, "xyzt");
-        gStyle->SetLabelSize(0.04, "xyz");
-        gStyle->SetCanvasBorderMode(0);
-        gStyle->SetCanvasColor(kWhite);
-        gStyle->SetFrameBorderMode(0);
-        gStyle->SetFrameFillColor(kWhite);
-        gStyle->SetPalette(1, 0);
-        gStyle->SetTitleSize(0.05, "t");
-*/
-
 
 TCanvas *c1 = new TCanvas("c1","c1",600,600);
 

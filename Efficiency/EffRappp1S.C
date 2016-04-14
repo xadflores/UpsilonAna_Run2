@@ -1,5 +1,5 @@
-#include <TH1.h>
 #include <TF1.h>
+#include <TH1.h>
 #include <TH2D.h>
 #include <TBranch.h>
 #include <TCanvas.h>
@@ -54,27 +54,21 @@ bool MassCut(TLorentzVector* DiMuon, double LowM, double HighM);
 double PtReweight(TLorentzVector* DiMuon, double coefficient, double constant);
 
 
-const int  nPtBin = 3;      // Need to use RapBin for rapidity
+const int  nRapBin = 2;
 const double muonPtCut = 4.0;
 double m1S_low = 7.77;
 double m1S_high = 10;
 double m2S_low = 8.333;
 double m2S_high = 10.563;
-double PbPb1S_coefficient = -0.015;
-double PbPb1S_constant = 1.08;
+double pp1S_coefficient = -0.022;
+double pp1S_constant = 1.09;
 
-
-void EffPbPb1S(){      // Change function name
+void EffRappp1S(){
 
 	gStyle->SetOptStat(0);
 
-	TChain myTree("hionia/myTree");   // Change source of tree
-	myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_00_03_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");   //  Change tree being added (Different for pp1S, pp2S, PbPb1S, PbPb2S)
-        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_03_06_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_06_09_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_09_12_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_12_15_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_15_30_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+	TChain myTree("hionia/myTree");
+	myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/pp_MC_Official/OniaTree_Ups1SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
 
 	Float_t         muMiDxy;
 	Float_t         muMiDz;
@@ -87,13 +81,15 @@ void EffPbPb1S(){      // Change function name
 	Int_t           muPlNTrkLayers;
 	Bool_t          muPlGoodMu;
 	Float_t         vProb;
+
 	double          ptWeight; 
-	double          ptWeightArr[6]={3.10497,4.11498,2.2579,1.2591,0.567094,0.783399};
-	int             centWeight;
-        double          ptBin[nPtBin] = {2.5,8.5,21};   //  RapBin
-        double          ptBinErr[nPtBin] = {2.5,3.5,9};
-        Float_t         ptBinEdges[nPtBin+1] = {0.0,5.0,12.0,30.0};
-	double		ptReweight;
+	double          ptWeightArr[2]={1.0,1.324};
+	double          centWeight;
+        double          RapBin[nRapBin] = {0.6,1.8};   //  RapBin
+        double          RapBinErr[nRapBin] = {0.6,0.6};  // RapBinErr
+        Float_t         RapBinEdges[nRapBin+1] = {0,1.2,2.4};
+        double          ptReweight;
+
 
 	Int_t           Centrality; 
 	ULong64_t       HLTriggers;
@@ -159,10 +155,22 @@ void EffPbPb1S(){      // Change function name
 	TBranch        *b_Reco_QQ_mumi_dz;   //!
 
 
-	TBranch        *b_Gen_QQ_size;   //
+	TBranch        *b_Gen_QQ_size;   //!
+//	TBranch        *b_Gen_QQ_sign;   //!
 	TBranch        *b_Gen_QQ_4mom;   //!
 	TBranch        *b_Gen_QQ_mupl_4mom;   //!
 	TBranch        *b_Gen_QQ_mumi_4mom;   //!
+//	TBranch        *b_Gen_QQ_VtxProb;   //!
+//	TBranch        *b_Gen_QQ_mupl_isGoodMuon;   //!
+//	TBranch        *b_Gen_QQ_mumi_isGoodMuon;   //!
+//	TBranch        *b_Gen_QQ_mupl_nPixWMea;   //!
+//	TBranch        *b_Gen_QQ_mumi_nPixWMea;   //!
+//	TBranch        *b_Gen_QQ_mupl_nTrkWMea;   //!
+//	TBranch        *b_Gen_QQ_mumi_nTrkWMea;   //!
+//	TBranch        *b_Gen_QQ_mupl_dxy;   //!
+//	TBranch        *b_Gen_QQ_mumi_dxy;   //!
+//	TBranch        *b_Gen_QQ_mupl_dz;   //!
+//	TBranch        *b_Gen_QQ_mumi_dz;   //!
 
 
 	//Set object pointer, Initialize
@@ -198,20 +206,31 @@ void EffPbPb1S(){      // Change function name
 
 
 	myTree.SetBranchAddress("Gen_QQ_size", &Gen_QQ_size, &b_Gen_QQ_size);
+//	myTree.SetBranchAddress("Gen_QQ_sign", Gen_QQ_sign, &b_Gen_QQ_sign);
 	myTree.SetBranchAddress("Gen_QQ_4mom", &Gen_QQ_4mom, &b_Gen_QQ_4mom);
 	myTree.SetBranchAddress("Gen_QQ_mupl_4mom", &Gen_QQ_mupl_4mom, &b_Gen_QQ_mupl_4mom);
 	myTree.SetBranchAddress("Gen_QQ_mumi_4mom", &Gen_QQ_mumi_4mom, &b_Gen_QQ_mumi_4mom);
+//	myTree.SetBranchAddress("Gen_QQ_VtxProb", Gen_QQ_VtxProb, &b_Gen_QQ_VtxProb);
+//	myTree.SetBranchAddress("Gen_QQ_mupl_isGoodMuon", Gen_QQ_mupl_isGoodMuon, &b_Gen_QQ_mupl_isGoodMuon);
+//	myTree.SetBranchAddress("Gen_QQ_mumi_isGoodMuon", Gen_QQ_mumi_isGoodMuon, &b_Gen_QQ_mumi_isGoodMuon);
+//	myTree.SetBranchAddress("Gen_QQ_mupl_nPixWMea", Gen_QQ_mupl_nPixWMea, &b_Gen_QQ_mupl_nPixWMea);
+//	myTree.SetBranchAddress("Gen_QQ_mumi_nPixWMea", Gen_QQ_mumi_nPixWMea, &b_Gen_QQ_mumi_nPixWMea);
+//	myTree.SetBranchAddress("Gen_QQ_mupl_nTrkWMea", Gen_QQ_mupl_nTrkWMea, &b_Gen_QQ_mupl_nTrkWMea);
+//	myTree.SetBranchAddress("Gen_QQ_mumi_nTrkWMea", Gen_QQ_mumi_nTrkWMea, &b_Gen_QQ_mumi_nTrkWMea);
+//	myTree.SetBranchAddress("Gen_QQ_mupl_dxy", Gen_QQ_mupl_dxy, &b_Gen_QQ_mupl_dxy);
+//	myTree.SetBranchAddress("Gen_QQ_mumi_dxy", Gen_QQ_mumi_dxy, &b_Gen_QQ_mumi_dxy);
+//	myTree.SetBranchAddress("Gen_QQ_mupl_dz", Gen_QQ_mupl_dz, &b_Gen_QQ_mupl_dz);
+//	myTree.SetBranchAddress("Gen_QQ_mumi_dz", Gen_QQ_mumi_dz, &b_Gen_QQ_mumi_dz);
 
 
-	TH1D  *RecoEvents=new TH1D("RecoEvents","Reconstructed", nPtBin, ptBinEdges);
+        TH1D  *RecoEvents=new TH1D("RecoEvents","Reconstructed", nRapBin, RapBinEdges);
 
-	TH1D  *GenEvents=new TH1D("GenEvents","Generated", nPtBin, ptBinEdges);
+        TH1D  *GenEvents=new TH1D("GenEvents","Generated", nRapBin, RapBinEdges);
 
-  	RecoEvents->Sumw2();
+        RecoEvents->Sumw2();
         GenEvents->Sumw2();
 
-	TH1D* hEff = new TH1D("Eff", "", nPtBin, ptBinEdges);
-
+        TH1D* hEff = new TH1D("Eff", "", nRapBin, RapBinEdges);
 
 
 
@@ -247,6 +266,7 @@ void EffPbPb1S(){      // Change function name
 			bool mumi_cut = 0;
 			bool acceptMu = 0;
 			bool trigL1Dmu = 0;
+//			bool trigL3Dmu = 0;
 			bool PtCutPass = 0;
 			bool MassCutPass = 0;
 
@@ -257,37 +277,37 @@ void EffPbPb1S(){      // Change function name
 			//check if muons are in acceptance
 			if(IsAccept(mupl4mom) && IsAccept(mumi4mom)){acceptMu = 1;}
 			if (PtCut(mupl4mom) && PtCut(mumi4mom)){ PtCutPass = 1; }
-			MassCutPass = MassCut(qq4mom, m1S_low, m1S_high);			
+			MassCutPass = MassCut(qq4mom, m1S_low, m1S_high);
 
 			//check if trigger bit is matched to dimuon
 			if((HLTriggers&1)==1 && (Reco_QQ_trig[iQQ]&1)==1){trigL1Dmu = 1;}
+//			if((HLTriggers&262144)==262144 && (Reco_QQ_trig[iQQ]&262144)==262144){trigL3Dmu = 1;}
 
 			//weights only needed for PbPb
-			 double weight = 0.0;
-			 ptWeight=0.0;
-			 centWeight = FindCenWeight(Centrality);
-			 if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
-                         if(qq4mom->Pt()>3 && qq4mom->Pt()<=6){ptWeight = ptWeightArr[1];}
-                         if(qq4mom->Pt()>6 && qq4mom->Pt()<=9){ptWeight = ptWeightArr[2];}
-                         if(qq4mom->Pt()>9 && qq4mom->Pt()<=12){ptWeight = ptWeightArr[3];} 
-			 if(qq4mom->Pt()>12 && qq4mom->Pt()<=15){ptWeight = ptWeightArr[4];} 
-			 if(qq4mom->Pt()>15 && qq4mom->Pt()<=30){ptWeight = ptWeightArr[5];} 
-			 if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, PbPb1S_coefficient, PbPb1S_constant);}
-                         weight = centWeight*ptWeight*ptReweight;
-//			 weight = centWeight*ptWeight;			
+			 double weight = 0;
+			// ptWeight=0;
+			// centWeight = FindCenWeight(Centrality);
+			// if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
+			// if(qq4mom->Pt()>3){ptWeight = ptWeightArr[1];}
+			// weight = centWeight*ptWeight;
+                         if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp1S_coefficient, pp1S_constant);}
+                         weight = ptReweight;
+
 			bool L1Pass=0;
-
+//			bool L3Pass=0;
 			if (Reco_QQ_sign[iQQ]==0 && acceptMu && mupl_cut && mumi_cut && trigL1Dmu){L1Pass=1;}
+//			if (Reco_QQ_sign[iQQ]==0 && acceptMu && mupl_cut && mumi_cut && trigL3Dmu){L3Pass=1;}
 
-                        if(TMath::Abs(qq4mom->Rapidity())<2.4 && Centrality < 160){
-			for(int i = 0; i<nPtBin;i++){
-				if(qq4mom->Pt()>(ptBin[i]-ptBinErr[i]) && qq4mom->Pt()<(ptBin[i]+ptBinErr[i])){
-					if(L1Pass == 1 && PtCutPass ==1 && MassCutPass == 1){RecoEvents->Fill(qq4mom->Pt(),weight);}
-				}
-			}	       //*/
-//			 if(L1Pass == 1 && PtCutPass ==1 && MassCutPass == 1){RecoEvents->Fill(qq4mom->Pt(),weight);}
+			if(qq4mom->Pt()<30){
+                        for(int i = 0; i<nRapBin;i++){
+                                if(TMath::Abs(qq4mom->Rapidity())>(RapBin[i]-RapBinErr[i]) && TMath::Abs(qq4mom->Rapidity())<(RapBin[i]+RapBinErr[i])){
+                                        if(L1Pass == 1 && PtCutPass ==1 && MassCutPass == 1){RecoEvents->Fill(TMath::Abs(qq4mom->Rapidity()),weight);}
+                        	}
+
+                	}    //   */
+//                         if(L1Pass == 1 && PtCutPass ==1 && MassCutPass == 1){RecoEvents->Fill(TMath::Abs(qq4mom->Rapidity()),weight);}
 			}
-	}
+		}
 
 
 		//Dinonminator loop
@@ -297,19 +317,19 @@ void EffPbPb1S(){      // Change function name
 			TLorentzVector *mupl4mom = (TLorentzVector*) Gen_QQ_mupl_4mom->At(iQQ);
 
 			//--Muid cuts for muon minus
-			 muMiDxy=Gen_QQ_mumi_dxy[iQQ];
-			 muMiDz=Gen_QQ_mumi_dz[iQQ];
-			 muMiNPxlLayers=Gen_QQ_mumi_nPixWMea[iQQ];
-			 muMiNTrkLayers=Gen_QQ_mumi_nTrkWMea[iQQ];
-			 muMiGoodMu = Gen_QQ_mumi_isGoodMuon[iQQ];
+			// muMiDxy=Gen_QQ_mumi_dxy[iQQ];
+			// muMiDz=Gen_QQ_mumi_dz[iQQ];
+			// muMiNPxlLayers=Gen_QQ_mumi_nPixWMea[iQQ];
+			// muMiNTrkLayers=Gen_QQ_mumi_nTrkWMea[iQQ];
+			// muMiGoodMu = Gen_QQ_mumi_isGoodMuon[iQQ];
 
 			//--Muid cuts for muon plus
-			 muPlDxy=Gen_QQ_mupl_dxy[iQQ];
-			 muPlDz=Gen_QQ_mupl_dz[iQQ];
-			 muPlNPxlLayers=Gen_QQ_mupl_nPixWMea[iQQ];
-			 muPlNTrkLayers=Gen_QQ_mupl_nTrkWMea[iQQ];
-			 muPlGoodMu = Gen_QQ_mupl_isGoodMuon[iQQ];
-			 vProb = Gen_QQ_VtxProb[iQQ];
+			// muPlDxy=Gen_QQ_mupl_dxy[iQQ];
+			// muPlDz=Gen_QQ_mupl_dz[iQQ];
+			// muPlNPxlLayers=Gen_QQ_mupl_nPixWMea[iQQ];
+			// muPlNTrkLayers=Gen_QQ_mupl_nTrkWMea[iQQ];
+			// muPlGoodMu = Gen_QQ_mupl_isGoodMuon[iQQ];
+			// vProb = Gen_QQ_VtxProb[iQQ];
 
 			bool mupl_cut = 0;
 			bool mumi_cut = 0;
@@ -318,7 +338,6 @@ void EffPbPb1S(){      // Change function name
 //			bool trigL3Dmu = 0;
 			bool PtCutPass = 0;
 			bool MassCutPass = 0;
-
 
 			//--Muon id cuts
 			if( (muPlGoodMu==1) && muPlNTrkLayers> 5 &&  muPlNPxlLayers > 0 && TMath::Abs(muPlDxy) < 0.3 && TMath::Abs(muPlDz) < 20 && vProb > 0.01){mupl_cut = 1;}
@@ -329,35 +348,37 @@ void EffPbPb1S(){      // Change function name
 			if (PtCut(mupl4mom) && PtCut(mumi4mom)){ PtCutPass = 1; }
 			MassCutPass = MassCut(qq4mom, m1S_low, m1S_high);
 
-
+			//check if trigger bit is matched to dimuon
+//			if((HLTriggers&1)==1){trigL1Dmu = 1;}
+//			if((HLTriggers&262144)==262144 && (Gen_QQ_trig[iQQ]&262144)==262144){trigL3Dmu = 1;}
 
 			//weights only needed for PbPb
-			 double weight = 0.0;
-			 ptWeight=0.0;
-			 centWeight = FindCenWeight(Centrality);
-			 if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
-                         if(qq4mom->Pt()>3 && qq4mom->Pt()<=6){ptWeight = ptWeightArr[1];}
-                         if(qq4mom->Pt()>6 && qq4mom->Pt()<=9){ptWeight = ptWeightArr[2];}
-                         if(qq4mom->Pt()>9 && qq4mom->Pt()<=12){ptWeight = ptWeightArr[3];}  
-                         if(qq4mom->Pt()>12 && qq4mom->Pt()<=15){ptWeight = ptWeightArr[4];}
-                         if(qq4mom->Pt()>15 && qq4mom->Pt()<=30){ptWeight = ptWeightArr[5];}
-			 if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, PbPb1S_coefficient, PbPb1S_constant);}
-			 weight = centWeight*ptWeight*ptReweight;
-//			 weight = centWeight*ptWeight;
+			 double weight = 0;
+			// ptWeight=0;
+			// centWeight = FindCenWeight(Centrality);
+			// if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
+			// if(qq4mom->Pt()>3){ptWeight = ptWeightArr[1];}
+			// weight = centWeight*ptWeight;
+                          if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp1S_coefficient, pp1S_constant);}
+                         weight = ptReweight;
 
-                        if(TMath::Abs(qq4mom->Rapidity())<2.4 && Centrality < 160){
-			for(int i = 0; i<nPtBin;i++){
-				if(qq4mom->Pt()>(ptBin[i]-ptBinErr[i]) && qq4mom->Pt()<(ptBin[i]+ptBinErr[i])){
-					if(acceptMu == 1 && PtCutPass == 1 && MassCutPass == 1){GenEvents->Fill(qq4mom->Pt(), weight);}
-				}
-			}    //*/
-			//if(acceptMu == 1 && PtCutPass == 1 && MassCutPass == 1){GenEvents->Fill(qq4mom->Pt(), weight);}
+//			bool L1Pass=0;
+//			bool L3Pass=0;
+//			if (acceptMu){L1Pass=1;}
+//			if (acceptMu){L3Pass=1;}
+
+                        if(qq4mom->Pt()<30){
+			for(int i = 0; i<nRapBin;i++){
+                                if(TMath::Abs(qq4mom->Rapidity())>(RapBin[i]-RapBinErr[i]) && TMath::Abs(qq4mom->Rapidity())<(RapBin[i]+RapBinErr[i])){
+                                        if(acceptMu == 1 && PtCutPass == 1 && MassCutPass == 1){GenEvents->Fill(TMath::Abs(qq4mom->Rapidity()),weight);}
+                                }
+                        }    // */
+//                         if(acceptMu == 1 && PtCutPass == 1 && MassCutPass == 1){GenEvents->Fill(TMath::Abs(qq4mom->Rapidity()),weight);}
 			}
 		}
 
 
 	}
-
 
 
 
@@ -386,30 +407,26 @@ TCanvas *c1 = new TCanvas("c1","c1",600,400);
 
 //From Ota
 
-//     	 RecoEvents->Sumw2();
-//         GenEvents->Sumw2();
          hEff->Divide(RecoEvents, GenEvents);
-
-//	 hEff->Draw();
 
 
 
    ///////////
  TFile* MyFileEff;
 //  if (Switch_1S2S == 1){
-          MyFileEff = new TFile("PbPbEff1S.root", "Recreate");
+//          MyFileEff = new TFile("PbPbEff1S.root", "Recreate");
 //  }
 //  if (Switch_1S2S == 2){
 //          MyFileEff = new TFile("PbPbEff2S.root", "Recreate");
 //  }
 //  if (Switch_1S2S == 3){
-//          MyFileEff = new TFile("ppEff1S.root", "Recreate");
+          MyFileEff = new TFile("RapppEff1S.root", "Recreate");
 //  }
 //  if (Switch_1S2S == 4){
 //          MyFileEff = new TFile("ppEff2S.root", "Recreate");
 //  }
-  RecoEvents->Write();
-  GenEvents->Write();
+//  hMassL1->Write();
+//  hgenMassL1->Write();
   hEff->Write();
 
 
@@ -420,13 +437,11 @@ TCanvas *c1 = new TCanvas("c1","c1",600,400);
 
 
 
-
-
 //	TCanvas *c1 = new TCanvas("c1","c1",600,400);
 	// Will use TGraphAsymmErrors
 	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(hEff);
 //	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(nPtBin);
-//	TrigEff->Divide(RecoEvents, GenEvents, "cl=0.683 b(1,1) mode");
+//	TrigEff->Divide(hMassL1, hgenMassL1, "cl=0.683 b(1,1) mode");
 
 //	TGraphErrors *TrigEff = new TGraphErrors(nPtBin,ptBin , Efficiency,ptBinErr , EfficiencyErr);
 	TrigEff->SetMarkerSize(1.0);
@@ -437,15 +452,16 @@ TCanvas *c1 = new TCanvas("c1","c1",600,400);
 	TrigEff->SetTitle("");
 //	TrigEff->SetMarkerStyle(21);
 //	TrigEff->SetMarkerColor(2);
-	TrigEff->GetYaxis()->SetTitle("EfficiencyPbPb(Upsilon(1S))");
-	TrigEff->GetXaxis()->SetTitle("p^{#mu+#mu-}_{T}");
+	TrigEff->GetYaxis()->SetTitle("Efficiencypp(Upsilon(1S))");
+	TrigEff->GetXaxis()->SetTitle("#eta");
 	TrigEff->GetYaxis()->SetRangeUser(0,1);
 
 	TrigEff->Draw("AP");	// */
 	c1->Update();
-	c1->SaveAs("EfficiencyVsPtUpsilonPbPb1S.png");
+	c1->SaveAs("EfficiencyVsRapidityUpsilonpp1S.png");
 
 }
+
 
 
 
@@ -492,18 +508,19 @@ bool MassCut(TLorentzVector* DiMuon, double LowM, double HighM){
 }
 
 double PtReweight(TLorentzVector* DiMuon, double coefficient, double constant){
-	double f = coefficient*(DiMuon->Pt()) + constant;
-	return f;
+        double f = coefficient*(DiMuon->Pt()) + constant;
+        return f;
 }
 
 /*
 double PtReweight(TLorentzVector* DiMuon){
-	TF1* f = new TF1("f","[0]*x+[1]",0.,30.);
-	f->SetParameter(0,-0.015);
-	f->SetParameter(1,1.08);
-	double temp = DiMuon->Pt();
-	return f->Eval(temp);	
-}      // */
+        TF1* f = new TF1("f","[0]*x+[1]",0,30);
+        f->SetParameter(0,-0.022);
+        f->SetParameter(1,1.09);
+        double temp = DiMuon->Pt();
+        return f->Eval(temp);
+}    //  */
+
 
 
 
