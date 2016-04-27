@@ -247,7 +247,7 @@ void buildModel(RooWorkspace& w, int sigModel, int bkgModel,bool fitExcited,int 
    { 
       case 1 : //use error function to fit the OS directly
          pdf_combinedbkgd            = new  RooGenericPdf("bkgPdf","bkgPdf",
-               "exp(-@0/decay)*(TMath::Erf((@0-turnOn)/width)+1)",
+               "exp(-@0/decay)*0.5*(TMath::Erf((@0-turnOn)/(TMath::Sqrt(2)*width))+1)",
                RooArgList(*mass,turnOn,width,decay));
          break;
 
