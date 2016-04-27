@@ -12,5 +12,7 @@ double DRapMaxArr[nRapBin] = {1.2,2.4};
 int CentMinArr[nCentPerBin] = {0,10,20,40,60,80,100,120,140};
 int CentMaxArr[nCentPerBin] = {10,20,40,60,80,100,120,140,160};
 
+int CentMinArrUL[nCentBin] = {0,20,60,100};
+int CentMaxArrUL[nCentBin] = {20,60,100,160};
 
 

@@ -7,32 +7,32 @@ const int CentBin = 9;
 const int RapBin = 2;
 
 //pbpb MB
-double turnOnPbPb = 7.8589;
-double widthPbPb = 1.43669;
-double decayPbPb = 6.0811;
+double turnOnPbPb = 7.86;
+double widthPbPb = 1.02;
+double decayPbPb = 6.08;
 
 //pbpb parameters kine
-double turnOnPtPbPb[PtBin] = {8.49753,10.4025,22.2682};
-double widthPtPbPb[PtBin] = {1.12846,18.9378,10.4544};
-double decayPtPbPb[PtBin] = {4.48729,5.70287,3.13039};
+double turnOnPtPbPb[PtBin] = {8.50,0,0};
+double widthPtPbPb[PtBin] = {0.798,0,0};
+double decayPtPbPb[PtBin] = {4.49,8.52,18.9};
 
-double turnOnRapPbPb[RapBin] = {7.81916,8.1812};
-double widthRapPbPb[RapBin] = {1.47851,1.69509};
-double decayRapPbPb[RapBin] = {8.22981,2.97486};
+double turnOnRapPbPb[RapBin] = {7.82,8.18};
+double widthRapPbPb[RapBin] = {1.05,1.20};
+double decayRapPbPb[RapBin] = {8.23,2.97};
 
 //pp MB
-double turnOnPP=8.51662;
-double widthPP=1.80399;
-double decayPP=7.95459;
+double turnOnPP=8.52;
+double widthPP=1.28;
+double decayPP=7.95;
 
 //pp parameters kine
-double turnOnPtPP[PtBin] = {8.97409,0.302983,0.00134883};
-double widthPtPP[PtBin] = {1.37024,1.12331,24.9998};
-double decayPtPP[PtBin] = {6.29136,24.6017,9.59006};
+double turnOnPtPP[PtBin] = {8.98,0,0};
+double widthPtPP[PtBin] = {0.970,0,0};
+double decayPtPP[PtBin] = {6.29,21.3,12.7};
 
-double turnOnRapPP[RapBin] = {8.53934,8.64054};
-double widthRapPP[RapBin] = {2.08368,1.55561};
-double decayRapPP[RapBin] = {11.2378,4.49366};
+double turnOnRapPP[RapBin] = {8.54,8.64};
+double widthRapPP[RapBin] = {1.48,1.10};
+double decayRapPP[RapBin] = {11.2,4.50};
 
 //PbPb MC MB
 double alphaMBPbPb = 1.48444;

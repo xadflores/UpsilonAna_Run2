@@ -5,7 +5,7 @@
 #include "Macros/drawPlot.C"
 #include "Macros/options.h"
 
-void SetOptions(InputOpt* opt, bool isData = true, bool isPbPb = false,bool inExcStat= false,int bin=0,bool doPt = false, bool doCent=false,bool doRap=false) {
+void SetOptions(InputOpt* opt, bool isData = true, bool isPbPb = false,bool inExcStat= false,int bin=0,bool doPt = false, bool doRap=false,bool doCent=false,bool doUL =false) {
 
   opt->isData    = isData;
   opt->isPbPb    = isPbPb;
@@ -24,7 +24,7 @@ void SetOptions(InputOpt* opt, bool isData = true, bool isPbPb = false,bool inEx
   opt->dMuon.M.Max = 14.; 
   opt->sMuon.Pt.Min  = 4;
 
-if(doPt && !doRap && !doCent){
+  if(doPt && !doRap && !doCent){
   opt->dMuon.Pt.Min = DPtMinArr[bin];
   opt->dMuon.Pt.Max = DPtMaxArr[bin];
   }
@@ -41,8 +41,8 @@ if(doPt && !doRap && !doCent){
   opt->dMuon.AbsRap.Max = 2.4;
   }
   if(doCent && !doRap && !doPt){ 
-  opt->Centrality.Start = opt->isPbPb ? CentMinArr[bin] : -1;
-  opt->Centrality.End   = opt->isPbPb ? CentMaxArr[bin] : 1 ;
+  opt->Centrality.Start = !doUL ? CentMinArr[bin] : CentMinArrUL[bin];
+  opt->Centrality.End   = !doUL ? CentMaxArr[bin] : CentMaxArrUL[bin];
   }
   else{
   opt->Centrality.Start = opt->isPbPb ? 0 : -1;
@@ -73,14 +73,15 @@ void fit2015(
            bool doPt    = false,    
            bool doRap    = false,   
            bool doCent    = false,  
-           bool doPeriph = false
+           bool doPeriph = false,
+	   bool doUL = false
            ) {
 
 
 gROOT->Macro("~/logon.C+");
 
 InputOpt opt;
-SetOptions(&opt, isData, isPbPb,inExcStat,bin,doPt,doCent,doRap);
+SetOptions(&opt, isData, isPbPb,inExcStat,bin,doPt,doRap,doCent,doUL);
 
  
 int nbins = 60; //ceil((opt.dMuon->M->Max - opt.dMuon->M->Min)/binw);
