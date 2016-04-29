@@ -102,7 +102,7 @@ void DoubleRatioRap(){
 
 	hEffDoubleRatio->GetYaxis()->SetTitle("Efficiency[#varUpsilon(2S)]/Efficieny[#varUpsilon(1S)]_{PbPb}/Efficiency[#varUpsilon(2S)]/Efficiency[#varUpsilon(1S)]_{pp}");
 	hEffDoubleRatio->GetYaxis()->SetRangeUser(0.5, 1.5);
-//	hEffDoubleRatio->GetXaxis()->SetRangeUser(0.0, 30.0);
+	hEffDoubleRatio->GetXaxis()->SetRangeUser(0.0, 2.4);
 	hEffDoubleRatio->GetXaxis()->SetTitleSize(0.05);
 	hEffDoubleRatio->GetXaxis()->SetTitleOffset(0.9);
 	hEffDoubleRatio->GetYaxis()->SetTitleSize(0.03);
@@ -112,7 +112,11 @@ void DoubleRatioRap(){
 
         can1->Update();
         can1->SaveAs("DoubleRatioVsRap.png");
-	  
+	
+        for (Int_t i = 0; i < (nRapBin); i++){
+        cout << hEffDoubleRatio->Eval(RapBin[i]) << " , - " << hEffDoubleRatio->GetErrorYlow(i) << " , + " << hEffDoubleRatio->GetErrorYhigh(i) << endl;
+        }
+  
         cout << "over" << endl;
 	
 	fEffSingleRatioRapPbPb->Close(); 

@@ -30,11 +30,11 @@ void SingleRatiopp2S1S(){
 
 	TH1D* hRecoNum;
 	TH1D* hGenNum;
-	TH1D* hEffNum;
+	TGraphAsymmErrors* hEffNum;
 
         TH1D* hRecoDen;
         TH1D* hGenDen;
-        TH1D* hEffDen;
+        TGraphAsymmErrors* hEffDen;
 	cout<<"declared variables"<<endl;
 //        TH1D* hEffRatio = new TH1D("EffRatio", "", nPtBin, ptBinEdges);
 
@@ -80,16 +80,16 @@ void SingleRatiopp2S1S(){
 //                hEffRatio->Divide(hEffNum, hEffDen);
 
 
-        for (Int_t i = 1; i < (nPtBin+1); i++){
+        for (Int_t i = 0; i < (nPtBin); i++){
 		cout<<"Started loop: i = "<<i<<endl;
-                EffNum = hEffNum->GetBinContent(i);
+                EffNum = hEffNum->Eval(ptBin[i]);
                 cout<<"Grabbed first bin of the numerator"<<endl;
-		EffDen = hEffDen->GetBinContent(i);
+		EffDen = hEffDen->Eval(ptBin[i]);
                 cout<<"Calculated individual efficiencies"<<endl;
-		EffNumErrH = hEffNum->GetBinErrorUp(i);
-                EffNumErrL = hEffNum->GetBinErrorLow(i);
-		EffDenErrH = hEffDen->GetBinErrorUp(i);
-		EffDenErrL = hEffDen->GetBinErrorLow(i);
+                EffNumErrH = hEffNum->GetErrorYhigh(i);
+                EffNumErrL = hEffNum->GetErrorYlow(i);
+                EffDenErrH = hEffDen->GetErrorYhigh(i);
+                EffDenErrL = hEffDen->GetErrorYlow(i);
 		cout<<"Calculated individual errors"<<endl;
 		EffRatio = EffNum / EffDen;
 		cout<<"Calculated ratio of efficiencies"<<endl;
@@ -97,8 +97,8 @@ void SingleRatiopp2S1S(){
                 EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL); //typo EffL -> ErrL
 		cout<<"Calculated error ratios"<<endl;
 
-                hEffpp2S1S->SetPoint((i - 1), ptBin[i - 1], EffRatio);
-                hEffpp2S1S->SetPointError((i - 1), ptBinErr[i - 1], ptBinErr[i - 1], EffRatioErrL, EffRatioErrH);
+                hEffpp2S1S->SetPoint((i), ptBin[i], EffRatio);
+                hEffpp2S1S->SetPointError((i), ptBinErr[i], ptBinErr[i], EffRatioErrL, EffRatioErrH);
 
 //		hist->SetBinContent(i, EffRatio);
 //		hist->SetBinError
@@ -120,22 +120,31 @@ void SingleRatiopp2S1S(){
 	TLine* line1 = new TLine(0,1,30,1);
         line1->SetLineStyle(kDashed);
 
-        hEffpp2S1S->SetMarkerSize(1.2);
+        hEffpp2S1S->SetMarkerSize(2.0);
         hEffpp2S1S->SetMarkerColor(kRed);
         hEffpp2S1S->SetMarkerStyle(21);
 	hEffpp2S1S->SetLineColor(kRed);
         hEffpp2S1S->GetXaxis()->SetTitle("p^{#mu+#mu-}_{T}");
         hEffpp2S1S->GetXaxis()->CenterTitle();
+	hEffpp2S1S->GetYaxis()->CenterTitle();
 
 	hEffpp2S1S->GetYaxis()->SetTitle("Efficiency[#varUpsilon(2S)/#varUpsilon(1S)]_{pp}");
 	hEffpp2S1S->GetYaxis()->SetRangeUser(0.5, 1.5);
-//	hEffpp2S1S->GetXaxis()->SetRangeUser(0.0, 30.0);
+	hEffpp2S1S->GetXaxis()->SetRangeUser(0.0, 30.0);
 	hEffpp2S1S->GetXaxis()->SetTitleSize(0.05);
 	hEffpp2S1S->GetXaxis()->SetTitleOffset(0.9);
 	hEffpp2S1S->GetYaxis()->SetTitleSize(0.05);
 	hEffpp2S1S->GetYaxis()->SetTitleOffset(0.9);
 	hEffpp2S1S->Draw("AP");
 	line1->Draw("SAME");
+
+        can1->Update();
+        can1->SaveAs("SingleRatioVsPtpp2S1S.png");
+
+        for (Int_t i = 0; i < (nPtBin); i++){
+        cout << hEffpp2S1S->Eval(ptBin[i]) << " , - " << hEffpp2S1S->GetErrorYlow(i) << " , + " << hEffpp2S1S->GetErrorYhigh(i) << endl;
+        }
+
 	  
         cout << "over" << endl;
 	

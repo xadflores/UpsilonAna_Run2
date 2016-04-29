@@ -34,8 +34,8 @@ double m1S_low = 7.77;
 double m1S_high = 10;
 double m2S_low = 8.333;
 double m2S_high = 10.563;
-double pp2S_coefficient = 0.073;
-double pp2S_constant = 0.69;
+double pp2S_coefficient =  -0.0180556;
+double pp2S_constant = 1.1111;
 
 void EffCenppFixing2S(){
 
@@ -181,10 +181,12 @@ void EffCenppFixing2S(){
 	hMassL1->Sumw2();
         hgenMassL1->Sumw2();
 
-	TH1D* hEff = new TH1D("Eff", "", 1, 0, 30);
+//	TH1D* hEff = new TH1D("Eff", "", 1, 0, 30);
 
 
-
+        TFile* ReweightFunctions = new TFile("dNdpT_root5.root", "Open");
+        ReweightFunctions->GetObject("pp2S", pp2S);
+        ReweightFunctions->GetObject("pp2Smc", pp2Smc);
 
 
 	Long64_t nentries = myTree.GetEntries();
@@ -242,7 +244,8 @@ void EffCenppFixing2S(){
 			// if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
 			// if(qq4mom->Pt()>3){ptWeight = ptWeightArr[1];}
 			// weight = centWeight*ptWeight;
-                         if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp2S_coefficient, pp2S_constant);}
+//                         if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp2S_coefficient, pp2S_constant);}
+                         if(qq4mom->Pt()<=30){ptReweight = (pp2S->Eval(qq4mom->Pt()))/(pp2Smc->Eval(qq4mom->Pt()));}
                          weight = ptReweight;
 
 			bool L1Pass=0;
@@ -292,7 +295,8 @@ void EffCenppFixing2S(){
 			// if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
 			// if(qq4mom->Pt()>3){ptWeight = ptWeightArr[1];}
 			// weight = centWeight*ptWeight;
-                         if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp2S_coefficient, pp2S_constant);}
+//                         if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp2S_coefficient, pp2S_constant);}
+                         if(qq4mom->Pt()<=30){ptReweight = (pp2S->Eval(qq4mom->Pt()))/(pp2Smc->Eval(qq4mom->Pt()));}
                          weight = ptReweight;
  
 
@@ -306,7 +310,6 @@ void EffCenppFixing2S(){
 			}
 		}
 
-
 	}
 
 
@@ -315,41 +318,19 @@ TCanvas *c1 = new TCanvas("c1","c1",600,600);
 
 //From Ota
 
-         hEff->Divide(hMassL1, hgenMassL1);
+//         hEff->Divide(hMassL1, hgenMassL1);
 //	 hEff->Draw();
-
-
-
-   ///////////
- TFile* MyFileEff;
-//  if (Switch_1S2S == 1){
-//          MyFileEff = new TFile("PbPbEff1S.root", "Recreate");
-//  }
-//  if (Switch_1S2S == 2){
-//          MyFileEff = new TFile("PbPbEff2S.root", "Recreate");
-//  }
-//  if (Switch_1S2S == 3){
-          MyFileEff = new TFile("CenppEff2S.root", "Recreate");
-//  }
-//  if (Switch_1S2S == 4){
-//          MyFileEff = new TFile("ppEff2S.root", "Recreate");
-//  }
-  hMassL1->Write();
-  hgenMassL1->Write();
-  hEff->Write();
-
-
-  MyFileEff->Close();
-
-//////////// */ //
-
 
 
 //	TCanvas *c1 = new TCanvas("c1","c1",600,400);
 	// Will use TGraphAsymmErrors
-	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(hEff);
+//	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(hEff);
 //	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(nPtBin);
 //	TrigEff->Divide(hMassL1, hgenMassL1, "cl=0.683 b(1,1) mode");
+
+        TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(nPtBin);
+        TrigEff->BayesDivide(hMassL1, hgenMassL1);
+        TrigEff->SetName("Eff");
 
 	TrigEff->SetMarkerSize(1.0);
         TrigEff->SetMarkerColor(kBlue);
@@ -369,7 +350,15 @@ TCanvas *c1 = new TCanvas("c1","c1",600,600);
 
 	TrigEff->Draw("AP");	// */
 	c1->Update();
-	c1->SaveAs("EfficiencyVsPtUpsilonpp2S.png");
+	c1->SaveAs("EfficiencyVsCenUpsilonpp2S.png");
+
+ TFile* MyFileEff;
+          MyFileEff = new TFile("CenppEff2S.root", "Recreate");
+  TrigEff->Write();
+  MyFileEff->Close();
+
+
+        ReweightFunctions->Close();
 
 }
 

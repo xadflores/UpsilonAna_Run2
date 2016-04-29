@@ -25,7 +25,7 @@ double RError(double A, double eA, double B, double eB);
 double PError(double A, double eA, double B, double eB);
 bool PtCut(TLorentzVector* Muon);
 bool MassCut(TLorentzVector* DiMuon, double LowM, double HighM);
-double PtReweight(TLorentzVector* DiMuon, double coefficient, double constant);
+//double PtReweight(TLorentzVector* DiMuon);
 
 
 const int  nPtBin = 3;
@@ -34,8 +34,8 @@ double m1S_low = 7.77;
 double m1S_high = 10;
 double m2S_low = 8.333;
 double m2S_high = 10.563;
-double pp1S_coefficient = -0.022;
-double pp1S_constant = 1.09;
+double pp1S_coefficient = - 0.0233431;
+double pp1S_constant = 1.1324;
 
 
 void Effpp1S(){
@@ -177,15 +177,15 @@ void Effpp1S(){
 
 	TH1D  *hgenMassL1=new TH1D("hgenMassL1","Generated", nPtBin, ptBinEdges);
 
-
-
 	hMassL1->Sumw2();
         hgenMassL1->Sumw2();
 
-	TH1D* hEff = new TH1D("Eff", "", nPtBin, ptBinEdges);
+//	TH1D* hEff = new TH1D("Eff", "", nPtBin, ptBinEdges);
 
 
-
+        TFile* ReweightFunctions = new TFile("dNdpT_root5.root", "Open");
+        ReweightFunctions->GetObject("pp1S", pp1S);
+	ReweightFunctions->GetObject("pp1Smc", pp1Smc);
 
 
 	Long64_t nentries = myTree.GetEntries();
@@ -243,7 +243,8 @@ void Effpp1S(){
 			// if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
 			// if(qq4mom->Pt()>3){ptWeight = ptWeightArr[1];}
 			// weight = centWeight*ptWeight;
-                         if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp1S_coefficient, pp1S_constant);}
+//                         if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom);}
+			 if(qq4mom->Pt()<=30){ptReweight = (pp1S->Eval(qq4mom->Pt()))/(pp1Smc->Eval(qq4mom->Pt()));}
                          weight = ptReweight;
 
 			bool L1Pass=0;
@@ -293,7 +294,8 @@ void Effpp1S(){
 			// if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
 			// if(qq4mom->Pt()>3){ptWeight = ptWeightArr[1];}
 			// weight = centWeight*ptWeight;
-                         if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp1S_coefficient, pp1S_constant);}
+//                         if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom);}
+                         if(qq4mom->Pt()<=30){ptReweight = (pp1S->Eval(qq4mom->Pt()))/(pp1Smc->Eval(qq4mom->Pt()));}
                          weight = ptReweight;
  
 
@@ -308,21 +310,19 @@ void Effpp1S(){
 		}
 
 
+
 	}
-
-
-TCanvas *c1 = new TCanvas("c1","c1",600,600);
 
 
 //From Ota
 
-         hEff->Divide(hMassL1, hgenMassL1);
+//         hEff->Divide(hMassL1, hgenMassL1);
 //	 hEff->Draw();
 
 
 
    ///////////
- TFile* MyFileEff;
+/* TFile* MyFileEff;
 //  if (Switch_1S2S == 1){
 //          MyFileEff = new TFile("PbPbEff1S.root", "Recreate");
 //  }
@@ -340,37 +340,69 @@ TCanvas *c1 = new TCanvas("c1","c1",600,600);
   hEff->Write();
 
 
-  MyFileEff->Close();
+  MyFileEff->Close();    // */
 
 //////////// */ //
 
-
+TCanvas *c1 = new TCanvas("c1","c1",1000, 680);
 
 //	TCanvas *c1 = new TCanvas("c1","c1",600,400);
 	// Will use TGraphAsymmErrors
-	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(hEff);
-//	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(nPtBin);
+//	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(hEff);
+	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(nPtBin);
+	TrigEff->BayesDivide(hMassL1, hgenMassL1);
+	TrigEff->SetName("Eff");
+
 //	TrigEff->Divide(hMassL1, hgenMassL1, "cl=0.683 b(1,1) mode");
 
-	TrigEff->SetMarkerSize(1.0);
+        TrigEff->SetTitle("1S");
+	TrigEff->SetMarkerSize(2.0);
         TrigEff->SetMarkerColor(kBlue);
-        TrigEff->SetMarkerStyle(20);
+        TrigEff->SetMarkerStyle(21);
         TrigEff->SetLineColor(kBlue);
 
-	TrigEff->SetTitle("");
-//	TrigEff->SetMarkerStyle(21);
-//	TrigEff->SetMarkerColor(2);
 	TrigEff->GetYaxis()->SetTitle("Efficiency[#varUpsilon(1S)]_{pp}");
 	TrigEff->GetYaxis()->SetTitleOffset(1.5);
 	TrigEff->GetYaxis()->SetRangeUser(0,1);
 	TrigEff->GetXaxis()->SetTitle("p^{#mu+#mu-}_{T}");
 	TrigEff->GetXaxis()->SetTitleOffset(1.5);
 	TrigEff->GetXaxis()->CenterTitle();
+	TrigEff->GetYaxis()->CenterTitle();
 	TrigEff->GetXaxis()->SetRangeUser(0,30);
 
 	TrigEff->Draw("AP");	// */
 	c1->Update();
 	c1->SaveAs("EfficiencyVsPtUpsilonpp1S.png");
+
+   ///////////
+    TFile* MyFileEff;
+   // //  if (Switch_1S2S == 1){
+   // //          MyFileEff = new TFile("PbPbEff1S.root", "Recreate");
+   // //  }
+   // //  if (Switch_1S2S == 2){
+   // //          MyFileEff = new TFile("PbPbEff2S.root", "Recreate");
+   // //  }
+   // //  if (Switch_1S2S == 3){
+              MyFileEff = new TFile("ppEff1S.root", "Recreate");
+   //           //  }
+   //           //  if (Switch_1S2S == 4){
+   //           //          MyFileEff = new TFile("ppEff2S.root", "Recreate");
+   //           //  }
+   //             hMassL1->Write();
+   //               hgenMassL1->Write();
+                    TrigEff->Write();
+   //
+   //
+                      MyFileEff->Close();
+
+
+        for (Int_t i = 0; i < (nPtBin); i++){
+       	cout << TrigEff->Eval(ptBin[i]) << " , - " << TrigEff->GetErrorYlow(i) << " , + " << TrigEff->GetErrorYhigh(i) << endl;
+	}
+
+
+        ReweightFunctions->Close();
+
 
 }
 
@@ -420,12 +452,17 @@ bool MassCut(TLorentzVector* DiMuon, double LowM, double HighM){
         return true;
 }
 
-double PtReweight(TLorentzVector* DiMuon, double coefficient, double constant){
+/* double PtReweight(TLorentzVector* DiMuon, double coefficient, double constant){
         double f = coefficient*(DiMuon->Pt()) + constant;
         return f;
-}
+}   // */
 
-
+/*
+double PtReweight(TLorentzVector* DiMuon){
+	double x = DiMuon->Pt();
+        double f = ([4]*TMath::Erf((x-[0])/[1]+1)+(1-[4])*TMath::Erf((x-[5])/[6]+1))*TMath::Exp(-x/[2])*[3]; 
+        return f;
+} // */ 
 
 
 //this re weights centrality dist. 

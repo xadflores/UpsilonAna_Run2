@@ -1,32 +1,4 @@
-#include <TH1.h>
-#include <TF1.h>
-#include <TH2D.h>
-#include <TBranch.h>
-#include <TCanvas.h>
-#include "TClonesArray.h"
-#include <TDirectory.h>
-#include <TFile.h>
-#include "TH1F.h"
-#include <TLatex.h>
-#include <TLegend.h>
-#include "TLorentzVector.h"
-#include <TMath.h>
-#include "TRandom.h"
-#include <TStyle.h>
-#include <TSystem.h>
-#include "TTree.h"
-#include "TString.h"
-#include "TChain.h"
-#include "TEfficiency.h"
-#include "TGraphErrors.h"
-#include "TGraphAsymmErrors.h"
-// miscellaneous  
-#include <fstream>
-#include <map>
-#include <iostream>
-#include <stdio.h>
-#include <string.h>
-#include <vector>
+#include "effCommon.h"
 
 //Macro to check L1/L3 ratio of 1S vs. pt in PbPb. 
 //run as follows:
@@ -60,13 +32,12 @@ double m1S_low = 7.77;
 double m1S_high = 10;
 double m2S_low = 8.333;
 double m2S_high = 10.563;
-double PbPb1S_coefficient = -0.015;
-double PbPb1S_constant = 1.08;
+double PbPb1S_coefficient = 0.168958;
+double PbPb1S_constant = 0.279706;
 
 
 void EffPbPb1S(){      // Change function name
-
-	gStyle->SetOptStat(0);
+        gROOT->Macro("logon.C+");
 
 	TChain myTree("hionia/myTree");   // Change source of tree
 	myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/PbPb_MC_Official/OniaTree_Pythia8_Ups1SMM_ptUps_00_03_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");   //  Change tree being added (Different for pp1S, pp2S, PbPb1S, PbPb2S)
@@ -210,9 +181,11 @@ void EffPbPb1S(){      // Change function name
   	RecoEvents->Sumw2();
         GenEvents->Sumw2();
 
-	TH1D* hEff = new TH1D("Eff", "", nPtBin, ptBinEdges);
+//	TH1D* hEff = new TH1D("Eff", "", nPtBin, ptBinEdges);
 
-
+        TFile* ReweightFunctions = new TFile("dNdpT_root5.root", "Open");
+        ReweightFunctions->GetObject("AA1S", AA1S);
+        ReweightFunctions->GetObject("AA1Smc", AA1Smc);
 
 
 
@@ -272,7 +245,8 @@ void EffPbPb1S(){      // Change function name
                          if(qq4mom->Pt()>9 && qq4mom->Pt()<=12){ptWeight = ptWeightArr[3];} 
 			 if(qq4mom->Pt()>12 && qq4mom->Pt()<=15){ptWeight = ptWeightArr[4];} 
 			 if(qq4mom->Pt()>15 && qq4mom->Pt()<=30){ptWeight = ptWeightArr[5];} 
-			 if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, PbPb1S_coefficient, PbPb1S_constant);}
+//			 if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, PbPb1S_coefficient, PbPb1S_constant);}
+                         if(qq4mom->Pt()<=30){ptReweight = (AA1S->Eval(qq4mom->Pt()))/(AA1Smc->Eval(qq4mom->Pt()));}
                          weight = centWeight*ptWeight*ptReweight;
 //			 weight = centWeight*ptWeight;			
 			bool L1Pass=0;
@@ -341,7 +315,8 @@ void EffPbPb1S(){      // Change function name
                          if(qq4mom->Pt()>9 && qq4mom->Pt()<=12){ptWeight = ptWeightArr[3];}  
                          if(qq4mom->Pt()>12 && qq4mom->Pt()<=15){ptWeight = ptWeightArr[4];}
                          if(qq4mom->Pt()>15 && qq4mom->Pt()<=30){ptWeight = ptWeightArr[5];}
-			 if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, PbPb1S_coefficient, PbPb1S_constant);}
+//			 if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, PbPb1S_coefficient, PbPb1S_constant);}
+                         if(qq4mom->Pt()<=30){ptReweight = (AA1S->Eval(qq4mom->Pt()))/(AA1Smc->Eval(qq4mom->Pt()));}
 			 weight = centWeight*ptWeight*ptReweight;
 //			 weight = centWeight*ptWeight;
 
@@ -355,95 +330,69 @@ void EffPbPb1S(){      // Change function name
 			}
 		}
 
-
 	}
 
 
 
 
-//From Ota
-	//gStyle->SetOptStat(1111);
-        gStyle->SetOptStat(000000000);
-        gStyle->SetOptFit(0);//*/
-        gStyle->SetEndErrorSize(5);
-        gStyle->SetLineWidth(2);
-        //gStyle->SetErrorX(0);
-
-        gStyle->SetLabelFont(62, "xyz");
-        gStyle->SetTitleFont(62, "xyzt");
-        gStyle->SetLabelSize(0.04, "xyz");
-        gStyle->SetCanvasBorderMode(0);
-        gStyle->SetCanvasColor(kWhite);
-        gStyle->SetFrameBorderMode(0);
-        gStyle->SetFrameFillColor(kWhite);
-        gStyle->SetPalette(1, 0);
-        gStyle->SetTitleSize(0.05, "t");
-
-
-
-TCanvas *c1 = new TCanvas("c1","c1",600,400);
+TCanvas *c1 = new TCanvas("c1","c1",1000,680);
 
 
 //From Ota
 
 //     	 RecoEvents->Sumw2();
 //         GenEvents->Sumw2();
-         hEff->Divide(RecoEvents, GenEvents);
+//         hEff->Divide(RecoEvents, GenEvents);
 
 //	 hEff->Draw();
-
-
-
-   ///////////
- TFile* MyFileEff;
-//  if (Switch_1S2S == 1){
-          MyFileEff = new TFile("PbPbEff1S.root", "Recreate");
-//  }
-//  if (Switch_1S2S == 2){
-//          MyFileEff = new TFile("PbPbEff2S.root", "Recreate");
-//  }
-//  if (Switch_1S2S == 3){
-//          MyFileEff = new TFile("ppEff1S.root", "Recreate");
-//  }
-//  if (Switch_1S2S == 4){
-//          MyFileEff = new TFile("ppEff2S.root", "Recreate");
-//  }
-  RecoEvents->Write();
-  GenEvents->Write();
-  hEff->Write();
-
-
-  MyFileEff->Close();
-
-//////////// */ //
-
-
 
 
 
 
 //	TCanvas *c1 = new TCanvas("c1","c1",600,400);
 	// Will use TGraphAsymmErrors
-	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(hEff);
+//	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(hEff);
 //	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(nPtBin);
 //	TrigEff->Divide(RecoEvents, GenEvents, "cl=0.683 b(1,1) mode");
 
 //	TGraphErrors *TrigEff = new TGraphErrors(nPtBin,ptBin , Efficiency,ptBinErr , EfficiencyErr);
-	TrigEff->SetMarkerSize(1.0);
+
+        TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(nPtBin);
+        TrigEff->BayesDivide(RecoEvents, GenEvents);
+        TrigEff->SetName("Eff");
+
+
+	TrigEff->SetMarkerSize(2.0);
         TrigEff->SetMarkerColor(kBlue);
-        TrigEff->SetMarkerStyle(20);
+        TrigEff->SetMarkerStyle(21);
         TrigEff->SetLineColor(kBlue);
 
-	TrigEff->SetTitle("");
+	TrigEff->SetTitle("1S");
 //	TrigEff->SetMarkerStyle(21);
 //	TrigEff->SetMarkerColor(2);
-	TrigEff->GetYaxis()->SetTitle("EfficiencyPbPb(Upsilon(1S))");
+	TrigEff->GetYaxis()->SetTitle("Efficiency[#varUpsilon(1S)]_{PbPb}");
 	TrigEff->GetXaxis()->SetTitle("p^{#mu+#mu-}_{T}");
+	TrigEff->GetXaxis()->CenterTitle();
+        TrigEff->GetYaxis()->CenterTitle();
 	TrigEff->GetYaxis()->SetRangeUser(0,1);
+	TrigEff->GetXaxis()->SetRangeUser(0,30);
 
 	TrigEff->Draw("AP");	// */
 	c1->Update();
 	c1->SaveAs("EfficiencyVsPtUpsilonPbPb1S.png");
+
+ TFile* MyFileEff;
+          MyFileEff = new TFile("PbPbEff1S.root", "Recreate");
+  TrigEff->Write();
+  MyFileEff->Close();
+
+        for (Int_t i = 0; i < (nPtBin); i++){
+        cout << TrigEff->Eval(ptBin[i]) << " , - " << TrigEff->GetErrorYlow(i) << " , + " << TrigEff->GetErrorYhigh(i) << endl;
+        }
+
+
+        ReweightFunctions->Close();
+
 
 }
 

@@ -30,11 +30,11 @@ void SingleRatioCenppFixing2S1S(){
 
 	TH1D* hRecoNum;
 	TH1D* hGenNum;
-	TH1D* hEffNum;
+	TGraphAsymmErrors* hEffNum;
 
         TH1D* hRecoDen;
         TH1D* hGenDen;
-        TH1D* hEffDen;
+        TGraphAsymmErrors* hEffDen;
 	cout<<"declared variables"<<endl;
 //        TH1D* hEffRatio = new TH1D("EffRatio", "", nPtBin, ptBinEdges);
 
@@ -80,16 +80,16 @@ void SingleRatioCenppFixing2S1S(){
 //                hEffRatio->Divide(hEffNum, hEffDen);
 
 
-        for (Int_t i = 1; i < (nPtBin+1); i++){
+        for (Int_t i = 0; i < (nPtBin); i++){
 		cout<<"Started loop: i = "<<i<<endl;
-                EffNum = hEffNum->GetBinContent(i);
+                EffNum = hEffNum->Eval(ptBin[i]);
                 cout<<"Grabbed first bin of the numerator"<<endl;
-		EffDen = hEffDen->GetBinContent(i);
+                EffDen = hEffDen->Eval(ptBin[i]);
                 cout<<"Calculated individual efficiencies"<<endl;
-		EffNumErrH = hEffNum->GetBinErrorUp(i);
-                EffNumErrL = hEffNum->GetBinErrorLow(i);
-		EffDenErrH = hEffDen->GetBinErrorUp(i);
-		EffDenErrL = hEffDen->GetBinErrorLow(i);
+                EffNumErrH = hEffNum->GetErrorYhigh(i);
+                EffNumErrL = hEffNum->GetErrorYlow(i);
+                EffDenErrH = hEffDen->GetErrorYhigh(i);
+                EffDenErrL = hEffDen->GetErrorYlow(i);
 		cout<<"Calculated individual errors"<<endl;
 		EffRatio = EffNum / EffDen;
 		cout<<"Calculated ratio of efficiencies"<<endl;
@@ -97,8 +97,8 @@ void SingleRatioCenppFixing2S1S(){
                 EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL); //typo EffL -> ErrL
 		cout<<"Calculated error ratios"<<endl;
 
-                hEffCenpp2S1S->SetPoint((i - 1), ptBin[i - 1], EffRatio);
-                hEffCenpp2S1S->SetPointError((i - 1), ptBinErr[i - 1], ptBinErr[i - 1], EffRatioErrL, EffRatioErrH);
+                hEffCenpp2S1S->SetPoint((i), ptBin[i], EffRatio);
+                hEffCenpp2S1S->SetPointError((i), ptBinErr[i], ptBinErr[i], EffRatioErrL, EffRatioErrH);
 
 //		hist->SetBinContent(i, EffRatio);
 //		hist->SetBinError

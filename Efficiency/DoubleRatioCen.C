@@ -107,7 +107,7 @@ void DoubleRatioCen(){
 
 	hEffDoubleRatio->GetYaxis()->SetTitle("Efficiency[#varUpsilon(2S)]/Efficiency[#varUpsilon(1S)]_{PbPb}/Efficiency[#varUpsilon(2S)]/Efficiency[#varUpsilon(1S)]_{pp}");
 	hEffDoubleRatio->GetYaxis()->SetRangeUser(0.5, 1.5);
-//	hEffDoubleRatio->GetXaxis()->SetRangeUser(0.0, 30.0);
+	hEffDoubleRatio->GetXaxis()->SetRangeUser(0.0, 160.0);
 	hEffDoubleRatio->GetXaxis()->SetTitleSize(0.05);
 	hEffDoubleRatio->GetXaxis()->SetTitleOffset(0.9);
 	hEffDoubleRatio->GetYaxis()->SetTitleSize(0.03);
@@ -118,6 +118,9 @@ void DoubleRatioCen(){
         can1->Update();
         can1->SaveAs("DoubleRatioVsCen.png");
 
+        for (Int_t i = 0; i < (nCenBin); i++){
+        cout << hEffDoubleRatio->Eval(CenBin[i]) << " , - " << hEffDoubleRatio->GetErrorYlow(i) << " , + " << hEffDoubleRatio->GetErrorYhigh(i) << endl;
+        }
 	  
         cout << "over" << endl;
 	

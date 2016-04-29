@@ -1,32 +1,4 @@
-#include <TF1.h>
-#include <TH1.h>
-#include <TH2D.h>
-#include <TBranch.h>
-#include <TCanvas.h>
-#include "TClonesArray.h"
-#include <TDirectory.h>
-#include <TFile.h>
-#include "TH1F.h"
-#include <TLatex.h>
-#include <TLegend.h>
-#include "TLorentzVector.h"
-#include <TMath.h>
-#include "TRandom.h"
-#include <TStyle.h>
-#include <TSystem.h>
-#include "TTree.h"
-#include "TString.h"
-#include "TChain.h"
-#include "TEfficiency.h"
-#include "TGraphErrors.h"
-#include "TGraphAsymmErrors.h"
-// miscellaneous  
-#include <fstream>
-#include <map>
-#include <iostream>
-#include <stdio.h>
-#include <string.h>
-#include <vector>
+#include "effCommon.h"
 
 //Macro to check L1/L3 ratio of 1S vs. pt in PbPb. 
 //run as follows:
@@ -60,12 +32,11 @@ double m1S_low = 7.77;
 double m1S_high = 10;
 double m2S_low = 8.333;
 double m2S_high = 10.563;
-double pp1S_coefficient = -0.022;
-double pp1S_constant = 1.09;
+double pp1S_coefficient = - 0.0233431;
+double pp1S_constant = 1.1324;
 
 void EffRappp1S(){
-
-	gStyle->SetOptStat(0);
+        gROOT->Macro("logon.C+");
 
 	TChain myTree("hionia/myTree");
 	myTree.Add("/scratch_menkar/CMS_Trees/OniaTrees_2015_5TeV/pp_MC_Official/OniaTree_Ups1SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
@@ -230,9 +201,11 @@ void EffRappp1S(){
         RecoEvents->Sumw2();
         GenEvents->Sumw2();
 
-        TH1D* hEff = new TH1D("Eff", "", nRapBin, RapBinEdges);
+//        TH1D* hEff = new TH1D("Eff", "", nRapBin, RapBinEdges);
 
-
+        TFile* ReweightFunctions = new TFile("dNdpT_root5.root", "Open");
+        ReweightFunctions->GetObject("pp1S", pp1S);
+        ReweightFunctions->GetObject("pp1Smc", pp1Smc);
 
 
 	Long64_t nentries = myTree.GetEntries();
@@ -290,7 +263,8 @@ void EffRappp1S(){
 			// if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
 			// if(qq4mom->Pt()>3){ptWeight = ptWeightArr[1];}
 			// weight = centWeight*ptWeight;
-                         if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp1S_coefficient, pp1S_constant);}
+//                         if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp1S_coefficient, pp1S_constant);}
+                         if(qq4mom->Pt()<=30){ptReweight = (pp1S->Eval(qq4mom->Pt()))/(pp1Smc->Eval(qq4mom->Pt()));}
                          weight = ptReweight;
 
 			bool L1Pass=0;
@@ -359,7 +333,8 @@ void EffRappp1S(){
 			// if(qq4mom->Pt()<=3){ptWeight = ptWeightArr[0];}
 			// if(qq4mom->Pt()>3){ptWeight = ptWeightArr[1];}
 			// weight = centWeight*ptWeight;
-                          if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp1S_coefficient, pp1S_constant);}
+//                          if(qq4mom->Pt()<=30){ptReweight = PtReweight(qq4mom, pp1S_coefficient, pp1S_constant);}
+                         if(qq4mom->Pt()<=30){ptReweight = (pp1S->Eval(qq4mom->Pt()))/(pp1Smc->Eval(qq4mom->Pt()));}
                          weight = ptReweight;
 
 //			bool L1Pass=0;
@@ -382,83 +357,61 @@ void EffRappp1S(){
 
 
 
-//From Ota
-	//gStyle->SetOptStat(1111);
-        gStyle->SetOptStat(000000000);
-        gStyle->SetOptFit(0);//*/
-        gStyle->SetEndErrorSize(5);
-        gStyle->SetLineWidth(2);
-        //gStyle->SetErrorX(0);
 
-        gStyle->SetLabelFont(62, "xyz");
-        gStyle->SetTitleFont(62, "xyzt");
-        gStyle->SetLabelSize(0.04, "xyz");
-        gStyle->SetCanvasBorderMode(0);
-        gStyle->SetCanvasColor(kWhite);
-        gStyle->SetFrameBorderMode(0);
-        gStyle->SetFrameFillColor(kWhite);
-        gStyle->SetPalette(1, 0);
-        gStyle->SetTitleSize(0.05, "t");
-
-
-
-TCanvas *c1 = new TCanvas("c1","c1",600,400);
+TCanvas *c1 = new TCanvas("c1","c1",1000,680);
 
 
 //From Ota
 
-         hEff->Divide(RecoEvents, GenEvents);
+//         hEff->Divide(RecoEvents, GenEvents);
 
 
-
-   ///////////
- TFile* MyFileEff;
-//  if (Switch_1S2S == 1){
-//          MyFileEff = new TFile("PbPbEff1S.root", "Recreate");
-//  }
-//  if (Switch_1S2S == 2){
-//          MyFileEff = new TFile("PbPbEff2S.root", "Recreate");
-//  }
-//  if (Switch_1S2S == 3){
-          MyFileEff = new TFile("RapppEff1S.root", "Recreate");
-//  }
-//  if (Switch_1S2S == 4){
-//          MyFileEff = new TFile("ppEff2S.root", "Recreate");
-//  }
-//  hMassL1->Write();
-//  hgenMassL1->Write();
-  hEff->Write();
-
-
-  MyFileEff->Close();
-
-//////////// */ //
 
 
 
 
 //	TCanvas *c1 = new TCanvas("c1","c1",600,400);
 	// Will use TGraphAsymmErrors
-	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(hEff);
+//	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(hEff);
 //	TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(nPtBin);
 //	TrigEff->Divide(hMassL1, hgenMassL1, "cl=0.683 b(1,1) mode");
 
 //	TGraphErrors *TrigEff = new TGraphErrors(nPtBin,ptBin , Efficiency,ptBinErr , EfficiencyErr);
-	TrigEff->SetMarkerSize(1.0);
+        TGraphAsymmErrors *TrigEff = new TGraphAsymmErrors(nRapBin);
+        TrigEff->BayesDivide(RecoEvents, GenEvents);
+        TrigEff->SetName("Eff");
+
+	TrigEff->SetMarkerSize(2.0);
         TrigEff->SetMarkerColor(kBlue);
-        TrigEff->SetMarkerStyle(20);
+        TrigEff->SetMarkerStyle(21);
         TrigEff->SetLineColor(kBlue);
 
 	TrigEff->SetTitle("");
-//	TrigEff->SetMarkerStyle(21);
-//	TrigEff->SetMarkerColor(2);
-	TrigEff->GetYaxis()->SetTitle("Efficiencypp(Upsilon(1S))");
-	TrigEff->GetXaxis()->SetTitle("#eta");
+	TrigEff->GetYaxis()->SetTitle("Efficiency[#varUpsilon(1S)]_{pp}");
+	TrigEff->GetXaxis()->SetTitle("|y|");
 	TrigEff->GetYaxis()->SetRangeUser(0,1);
+        TrigEff->GetXaxis()->SetRangeUser(0.0, 2.4);
+        TrigEff->GetXaxis()->CenterTitle();
+        TrigEff->GetYaxis()->CenterTitle();
 
 	TrigEff->Draw("AP");	// */
 	c1->Update();
 	c1->SaveAs("EfficiencyVsRapidityUpsilonpp1S.png");
+
+ TFile* MyFileEff;
+          MyFileEff = new TFile("RapppEff1S.root", "Recreate");
+  TrigEff->Write();
+
+
+  MyFileEff->Close();
+
+        for (Int_t i = 0; i < (nRapBin); i++){
+        cout << TrigEff->Eval(RapBin[i]) << " , - " << TrigEff->GetErrorYlow(i) << " , + " << TrigEff->GetErrorYhigh(i) << endl;
+        }
+
+
+        ReweightFunctions->Close();
+
 
 }
 

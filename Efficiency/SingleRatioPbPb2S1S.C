@@ -23,11 +23,11 @@ void SingleRatioPbPb2S1S(){
 
 	TH1D* hRecoNum;
 	TH1D* hGenNum;
-	TH1D* hEffNum;
+	TGraphAsymmErrors* hEffNum;
 
         TH1D* hRecoDen;
         TH1D* hGenDen;
-        TH1D* hEffDen;
+        TGraphAsymmErrors* hEffDen;
 	cout<<"declared variables"<<endl;
 //        TH1D* hEffRatio = new TH1D("EffRatio", "", nPtBin, ptBinEdges);
 
@@ -70,16 +70,16 @@ void SingleRatioPbPb2S1S(){
 //                hEffRatio->Divide(hEffNum, hEffDen);
 
 
-        for (Int_t i = 1; i < (nPtBin+1); i++){
+        for (Int_t i = 0; i < (nPtBin); i++){
 		cout<<"Started loop: i = "<<i<<endl;
-                EffNum = hEffNum->GetBinContent(i);
+                EffNum = hEffNum->Eval(ptBin[i]);
                 cout<<"Grabbed first bin of the numerator"<<endl;
-		EffDen = hEffDen->GetBinContent(i);
+		EffDen = hEffDen->Eval(ptBin[i]);
                 cout<<"Calculated individual efficiencies"<<endl;
-		EffNumErrH = hEffNum->GetBinErrorUp(i);
-                EffNumErrL = hEffNum->GetBinErrorLow(i);
-		EffDenErrH = hEffDen->GetBinErrorUp(i);
-		EffDenErrL = hEffDen->GetBinErrorLow(i);
+		EffNumErrH = hEffNum->GetErrorYhigh(i);
+                EffNumErrL = hEffNum->GetErrorYlow(i);
+		EffDenErrH = hEffDen->GetErrorYhigh(i);
+		EffDenErrL = hEffDen->GetErrorYlow(i);
 		cout<<"Calculated individual errors"<<endl;
 		EffRatio = EffNum / EffDen;
 		cout<<"Calculated ratio of efficiencies"<<endl;
@@ -87,8 +87,8 @@ void SingleRatioPbPb2S1S(){
                 EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL);
 		cout<<"Calculated error ratios"<<endl;
 
-                hEffPbPb2S1S->SetPoint((i - 1), ptBin[i - 1], EffRatio);
-                hEffPbPb2S1S->SetPointError((i - 1), ptBinErr[i - 1], ptBinErr[i - 1], EffRatioErrL, EffRatioErrH);
+                hEffPbPb2S1S->SetPoint((i), ptBin[i], EffRatio);
+                hEffPbPb2S1S->SetPointError((i), ptBinErr[i], ptBinErr[i], EffRatioErrL, EffRatioErrH);
         }
 
 
@@ -111,16 +111,25 @@ void SingleRatioPbPb2S1S(){
         hEffPbPb2S1S->SetMarkerStyle(21);
 	hEffPbPb2S1S->SetLineColor(kRed);
         hEffPbPb2S1S->GetXaxis()->SetTitle("p^{#mu+#mu-}_{T}");
+        hEffPbPb2S1S->GetXaxis()->CenterTitle();
+        hEffPbPb2S1S->GetYaxis()->CenterTitle();
 
 	hEffPbPb2S1S->GetYaxis()->SetTitle("Efficiency[#varUpsilon(2S)/#varUpsilon(1S)]_{PbPb}");
 	hEffPbPb2S1S->GetYaxis()->SetRangeUser(0.5, 1.5);
+	hEffPbPb2S1S->GetXaxis()->SetRangeUser(0, 30);
 	hEffPbPb2S1S->GetXaxis()->SetTitleSize(0.05);
 	hEffPbPb2S1S->GetXaxis()->SetTitleOffset(0.9);
 	hEffPbPb2S1S->GetYaxis()->SetTitleSize(0.05);
 	hEffPbPb2S1S->GetYaxis()->SetTitleOffset(0.9);
-	hEffPbPb2S1S->Draw("");
+	hEffPbPb2S1S->Draw("AP");
+	line1->Draw("SAME");
+        can1->Update();
+        can1->SaveAs("SingleRatioVsPtPbPb2S1S.png");
 
-	  
+        for (Int_t i = 0; i < (nPtBin); i++){
+        cout << hEffPbPb2S1S->Eval(ptBin[i]) << " , - " << hEffPbPb2S1S->GetErrorYlow(i) << " , + " << hEffPbPb2S1S->GetErrorYhigh(i) << endl;
+        }
+ 
         cout << "over" << endl;
 
         fPbPbEff2S->Close();

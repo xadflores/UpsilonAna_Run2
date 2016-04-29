@@ -113,6 +113,9 @@ void DoubleRatioPt(){
         can1->Update();
         can1->SaveAs("DoubleRatioVsPt.png");
 
+        for (Int_t i = 0; i < (nPtBin); i++){
+        cout << hEffDoubleRatio->Eval(ptBin[i]) << " , - " << hEffDoubleRatio->GetErrorYlow(i) << " , + " << hEffDoubleRatio->GetErrorYhigh(i) << endl;
+        }
   
         cout << "over" << endl;
 	
