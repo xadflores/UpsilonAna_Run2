@@ -350,17 +350,20 @@ void dimuEff(
 			 //getting the tree weight from pt generated MC bins
                         
 			 //reweight from dn/dpt function
-                         ptReweight = (fAA->Eval(ptReco))/(fAAmc->Eval(ptReco));
 //ptReweight = 1;
 //centWeight =1;
                          int tNum = -1;
 			 //total weighting factor
                          if(isPbPb){
+                         ptReweight = (fAA->Eval(ptReco))/(fAAmc->Eval(ptReco));
                          tNum = myTree.GetTreeNumber();
 			 ptWeight = GetWeight(tNum,oniaMode);
                          weight = centWeight*ptWeight*ptReweight;
 			 }
-			 else {weight = ptReweight;}
+			 else {
+                         ptReweight = (fpp->Eval(ptReco))/(fppmc->Eval(ptReco));
+			 weight = ptReweight;
+ 			 }
                         
 	      		bool recoPass=0;
 
@@ -412,16 +415,19 @@ void dimuEff(
   			 rapGen = TMath::Abs(g_qq4mom->Rapidity());
                           
 
-                         ptReweight = (fAA->Eval(ptGen))/(fAAmc->Eval(ptGen));
 			 
 			 int tNum = -1;
                          //getting the tree pt mc weighting from generation
 			 if(isPbPb){
+                         ptReweight = (fAA->Eval(ptGen))/(fAAmc->Eval(ptGen));
                          tNum = myTree.GetTreeNumber();
 			 ptWeight = GetWeight(tNum,oniaMode);
                          weight = centWeight*ptWeight*ptReweight;
 			 }
-			 else{weight = ptReweight;}
+			 else{
+                         ptReweight = (fpp->Eval(ptGen))/(fppmc->Eval(ptGen));
+			 weight = ptReweight;
+			 }
 
 	                //fill GenEvent Histo Denominator if passing 
 			if(rapGen<2.4 && ptGen<30 && Centrality <160){
@@ -440,8 +446,6 @@ void dimuEff(
 	}
 
 
-TCanvas *c1 = new TCanvas("c1","c1",600,600);
-c1->cd();
 
 //------Cent---------       
 //dividing the RecoEvents by GenEvents 
@@ -450,6 +454,8 @@ EffCent->BayesDivide(RecoEvents, GenEvents);
 EffCent->SetName("EffCent");
 
 if(isPbPb){
+TCanvas *c1 = new TCanvas("c1","c1",600,600);
+c1->cd();
 EffCent->SetMarkerSize(1.0);
 EffCent->SetMarkerColor(kBlue);
 EffCent->SetMarkerStyle(21);
