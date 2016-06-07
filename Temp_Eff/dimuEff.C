@@ -1,12 +1,6 @@
 #include "effCommon.h"
 
 
-//to run 
-//root -l
-//.L EffCenPbPb2S.C+
-//EffCenPbPb2S()
-//
-
 double GetWeight(int numTree,int oniaMode);
 bool IsAccept(TLorentzVector *Muon);
 double FindCenWeight(int Bin);
@@ -261,22 +255,22 @@ void dimuEff(
         GenEventsRap->Sumw2();
 
         //weights for 1S are used for 2S as well
-	TF1* fAA;
-	TF1* fAAmc;
-	TF1* fpp;
-	TF1* fppmc;
-        TFile* ReweightFunctions = new TFile("dNdpT_root5.root", "Open");
+	TF1* f1SAA;
+	TF1* f2SAA;
+	TF1* f1Spp;
+	TF1* f2Spp;
+        TFile* ReweightFunctions = new TFile("dNdpT_ratio_tsallis.root", "Open");
 
-        fAA = (TF1*)ReweightFunctions->Get("AA1S");
-        fAAmc = (TF1*)ReweightFunctions->Get("AA1Smc");
-        fpp = (TF1*)ReweightFunctions->Get("pp1S");
-        fppmc = (TF1*)ReweightFunctions->Get("pp1Smc");
+        f1SAA = (TF1*)ReweightFunctions->Get("f1sraa");
+        f2SAA = (TF1*)ReweightFunctions->Get("f2sraa");
+        f1Spp = (TF1*)ReweightFunctions->Get("f1srpp");
+        f2Spp = (TF1*)ReweightFunctions->Get("f2srpp");
 
-        /*AA2S->SetNpx(100000);
-        AA2Smc->SetNpx(100000);
-	AA2S->SetRange(0,40);
-	AA2Smc->SetRange(0,40);
-	*/
+        //f1SAA->SetNpx(100000);
+        //f2SAA->SetNpx(100000);
+	//f1SAA->SetRange(0,40);
+	//f2SAA->SetRange(0,40);
+	
 
 
 	if(oniaMode == 1){
@@ -350,18 +344,20 @@ void dimuEff(
 			 //getting the tree weight from pt generated MC bins
                         
 			 //reweight from dn/dpt function
-//ptReweight = 1;
-//centWeight =1;
                          int tNum = -1;
 			 //total weighting factor
                          if(isPbPb){
-                         ptReweight = (fAA->Eval(ptReco))/(fAAmc->Eval(ptReco));
+                         if(oniaMode==1){ptReweight = (f1SAA->Eval(ptReco));}
+                         if(oniaMode==2){ptReweight = (f2SAA->Eval(ptReco));} 
                          tNum = myTree.GetTreeNumber();
+			 //ptReweight=1;
 			 ptWeight = GetWeight(tNum,oniaMode);
                          weight = centWeight*ptWeight*ptReweight;
 			 }
 			 else {
-                         ptReweight = (fpp->Eval(ptReco))/(fppmc->Eval(ptReco));
+                         if(oniaMode==1){ptReweight = (f1Spp->Eval(ptReco));}
+                         if(oniaMode==2){ptReweight = (f2Spp->Eval(ptReco));}
+			 //ptReweight=1;
 			 weight = ptReweight;
  			 }
                         
@@ -419,13 +415,17 @@ void dimuEff(
 			 int tNum = -1;
                          //getting the tree pt mc weighting from generation
 			 if(isPbPb){
-                         ptReweight = (fAA->Eval(ptGen))/(fAAmc->Eval(ptGen));
+                         if(oniaMode==1){ptReweight = (f1SAA->Eval(ptGen));}
+                         if(oniaMode==2){ptReweight = (f2SAA->Eval(ptGen));}
                          tNum = myTree.GetTreeNumber();
+			 //ptReweight=1;
 			 ptWeight = GetWeight(tNum,oniaMode);
                          weight = centWeight*ptWeight*ptReweight;
 			 }
 			 else{
-                         ptReweight = (fpp->Eval(ptGen))/(fppmc->Eval(ptGen));
+                         if(oniaMode==1){ptReweight = (f1Spp->Eval(ptGen));}
+                         if(oniaMode==2){ptReweight = (f2Spp->Eval(ptGen));}
+			 //ptReweight=1;
 			 weight = ptReweight;
 			 }
 
