@@ -259,12 +259,12 @@ void dimuEff(
 	TF1* f2SAA;
 	TF1* f1Spp;
 	TF1* f2Spp;
-        TFile* ReweightFunctions = new TFile("dNdpT_ratio_tsallis.root", "Open");
+        TFile* ReweightFunctions = new TFile("dNdpT_ratio_tsallis_June7.root", "Open");
 
-        f1SAA = (TF1*)ReweightFunctions->Get("f1sraa");
-        f2SAA = (TF1*)ReweightFunctions->Get("f2sraa");
-        f1Spp = (TF1*)ReweightFunctions->Get("f1srpp");
-        f2Spp = (TF1*)ReweightFunctions->Get("f2srpp");
+        f1SAA = (TF1*)ReweightFunctions->Get("f1sraa_test");
+        f2SAA = (TF1*)ReweightFunctions->Get("f2sraa_test");
+        f1Spp = (TF1*)ReweightFunctions->Get("f1srpp_test");
+        f2Spp = (TF1*)ReweightFunctions->Get("f2srpp_test");
 
         //f1SAA->SetNpx(100000);
         //f2SAA->SetNpx(100000);
@@ -456,14 +456,11 @@ EffCent->SetName("EffCent");
 if(isPbPb){
 TCanvas *c1 = new TCanvas("c1","c1",600,600);
 c1->cd();
-EffCent->SetMarkerSize(1.0);
-EffCent->SetMarkerColor(kBlue);
-EffCent->SetMarkerStyle(21);
-EffCent->SetLineColor(kBlue);
+//EffCent->SetMarkerSize(1.0);
+EffCent->SetMarkerColor(kRed);
+EffCent->SetMarkerStyle(20);
 
 EffCent->SetTitle("");
-EffCent->SetMarkerStyle(21);
-EffCent->SetMarkerColor(2);
 EffCent->GetYaxis()->SetTitle(Form("Efficiency[#varUpsilon(%dS)]_{%s}",oniaMode, isPbPb ? "PbPb" : "PP"));
 EffCent->GetXaxis()->SetTitle(Form("%s",isPbPb ? "Centrality" : "Integrated Bin"));
 EffCent->GetYaxis()->SetRangeUser(0,1);
@@ -476,6 +473,14 @@ EffCent->Draw("AP");
 c1->SaveAs(Form("EfficiencyCent_%dS_%s.png",oniaMode,isPbPb ? "PbPb" : "PP"));
 }
 //----------Pt
+/*TCanvas *cpt = new TCanvas("cpt","cpt",600,600);
+cpt->cd();
+RecoEventsPt->SetMarkerColor(kBlue);
+GenEventsPt->SetMarkerColor(kRed);
+
+GenEventsPt->Draw();
+RecoEventsPt->Draw("SAME");
+*/
 TCanvas *c2 = new TCanvas("c2","c2",600,600);
 c2->cd();
 
@@ -483,14 +488,11 @@ TGraphAsymmErrors *EffPt = new TGraphAsymmErrors(nPtBin);
 EffPt->BayesDivide(RecoEventsPt, GenEventsPt);
 EffPt->SetName("EffPt");
 
-EffPt->SetMarkerSize(1.0);
-EffPt->SetMarkerColor(kBlue);
-EffPt->SetMarkerStyle(21);
-EffPt->SetLineColor(kBlue);
+//EffPt->SetMarkerSize(1.0);
+EffPt->SetMarkerColor(kRed);
+EffPt->SetMarkerStyle(20);
 
 EffPt->SetTitle("");
-EffPt->SetMarkerStyle(21);
-EffPt->SetMarkerColor(2);
 EffPt->GetYaxis()->SetTitle(Form("Efficiency[#varUpsilon(%dS)]_{%s}",oniaMode, isPbPb ? "PbPb" : "PP"));
 EffPt->GetXaxis()->SetTitle("p_{T}");
 EffPt->GetYaxis()->SetRangeUser(0,1);
@@ -502,6 +504,8 @@ EffPt->Draw("AP");
 
 c2->SaveAs(Form("EfficiencyPt_%dS_%s.png",oniaMode,isPbPb ? "PbPb" : "PP"));
 
+
+
 //------------Rap
 TCanvas *c3 = new TCanvas("c3","c3",600,600);
 c3->cd();
@@ -510,14 +514,11 @@ TGraphAsymmErrors *EffRap = new TGraphAsymmErrors(nRapBin);
 EffRap->BayesDivide(RecoEventsRap, GenEventsRap);
 EffRap->SetName("EffRap");
 
-EffRap->SetMarkerSize(1.0);
-EffRap->SetMarkerColor(kBlue);
-EffRap->SetMarkerStyle(21);
-EffRap->SetLineColor(kBlue);
+//EffRap->SetMarkerSize(1.0);
+EffRap->SetMarkerColor(kRed);
+EffRap->SetMarkerStyle(20);
 
 EffRap->SetTitle("");
-EffRap->SetMarkerStyle(21);
-EffRap->SetMarkerColor(2);
 EffRap->GetYaxis()->SetTitle(Form("Efficiency[#varUpsilon(%dS)]_{%s}",oniaMode, isPbPb ? "PbPb" : "PP"));
 EffRap->GetXaxis()->SetTitle("|y|");
 EffRap->GetYaxis()->SetRangeUser(0,1);
@@ -537,14 +538,11 @@ TGraphAsymmErrors *EffInt = new TGraphAsymmErrors(1);
 EffInt->BayesDivide(RecoEventsInt, GenEventsInt);
 EffInt->SetName("EffInt");
 
-EffInt->SetMarkerSize(1.0);
-EffInt->SetMarkerColor(kBlue);
-EffInt->SetMarkerStyle(21);
-EffInt->SetLineColor(kBlue);
+//EffInt->SetMarkerSize(1.0);
+EffInt->SetMarkerColor(kRed);
+EffInt->SetMarkerStyle(20);
 
 EffInt->SetTitle("");
-EffInt->SetMarkerStyle(21);
-EffInt->SetMarkerColor(2);
 EffInt->GetYaxis()->SetTitle(Form("Efficiency[#varUpsilon(%dS)]_{%s}",oniaMode, isPbPb ? "PbPb" : "PP"));
 EffInt->GetXaxis()->SetTitle("Integrated bin");
 EffInt->GetYaxis()->SetRangeUser(0,1);

@@ -47,7 +47,7 @@ void singleRatioEff(bool isPbPb = true){
 	hEffInt2S1S->SetName("hEffIntSingle");
 
 
-/////////// pp 2S
+//--- pp 2S
 
         TFile* fEff2S = new TFile(Form("Eff_%s_2S.root",isPbPb ? "PbPb" : "PP"), "Open");
 	fEff2S->GetObject("EffCent", hEffNumCent);
@@ -56,7 +56,7 @@ void singleRatioEff(bool isPbPb = true){
 	fEff2S->GetObject("EffRap", hEffNumRap);
 
 
-////////// pp 1S
+//--- pp 1S
 
 	TFile* fEff1S = new TFile(Form("Eff_%s_1S.root",isPbPb ? "PbPb" : "PP"), "Open");
         fEff1S->GetObject("EffCent", hEffDenCent);
@@ -66,7 +66,7 @@ void singleRatioEff(bool isPbPb = true){
 
 
 
-///////// Single Ratio 2S/1S Calculation
+//--- Single Ratio 2S/1S Calculation
 
         double EffRatio;
         double EffNum;
@@ -78,7 +78,6 @@ void singleRatioEff(bool isPbPb = true){
 	double EffRatioErrH;
         double EffRatioErrL;
 
-//                hEffRatio->Divide(hEffNum, hEffDen);
 
 	if(isPbPb){
         for (Int_t i = 0; i < nCenBin; i++){
@@ -199,10 +198,9 @@ void singleRatioEff(bool isPbPb = true){
 	TLine* line1 = new TLine(0,1,160,1);
         line1->SetLineStyle(kDashed);
 
-        hEffCen2S1S->SetMarkerSize(2.0);
+        //hEffCen2S1S->SetMarkerSize(2.0);
         hEffCen2S1S->SetMarkerColor(kRed);
-        hEffCen2S1S->SetMarkerStyle(21);
-	hEffCen2S1S->SetLineColor(kRed);
+        hEffCen2S1S->SetMarkerStyle(20);
         hEffCen2S1S->SetTitle("");
         hEffCen2S1S->GetXaxis()->SetTitle("Centrality");
         hEffCen2S1S->GetXaxis()->CenterTitle();
@@ -221,10 +219,9 @@ void singleRatioEff(bool isPbPb = true){
 	TLine* line2 = new TLine(0,1,30,1);
         line2->SetLineStyle(kDashed);
 
-        hEffPt2S1S->SetMarkerSize(2.0);
+        //hEffPt2S1S->SetMarkerSize(1.0);
         hEffPt2S1S->SetMarkerColor(kRed);
-        hEffPt2S1S->SetMarkerStyle(21);
-	hEffPt2S1S->SetLineColor(kRed);
+        hEffPt2S1S->SetMarkerStyle(20);
         hEffPt2S1S->SetTitle("");
         hEffPt2S1S->GetXaxis()->SetTitle("p_{T}");
         hEffPt2S1S->GetXaxis()->CenterTitle();
@@ -243,10 +240,9 @@ void singleRatioEff(bool isPbPb = true){
 	TLine* line3 = new TLine(0,1,2.4,1);
         line3->SetLineStyle(kDashed);
 
-        hEffRap2S1S->SetMarkerSize(2.0);
+        //hEffRap2S1S->SetMarkerSize(2.0);
         hEffRap2S1S->SetMarkerColor(kRed);
-        hEffRap2S1S->SetMarkerStyle(21);
-	hEffRap2S1S->SetLineColor(kRed);
+        hEffRap2S1S->SetMarkerStyle(20);
         hEffRap2S1S->SetTitle("");
         hEffRap2S1S->GetXaxis()->SetTitle("|y|");
         hEffRap2S1S->GetXaxis()->CenterTitle();
@@ -266,10 +262,9 @@ void singleRatioEff(bool isPbPb = true){
 	TLine* line4 = new TLine(0,1,2.4,1);
         line4->SetLineStyle(kDashed);
 
-        hEffInt2S1S->SetMarkerSize(2.0);
+        //hEffInt2S1S->SetMarkerSize(2.0);
         hEffInt2S1S->SetMarkerColor(kRed);
-        hEffInt2S1S->SetMarkerStyle(21);
-	hEffInt2S1S->SetLineColor(kRed);
+        hEffInt2S1S->SetMarkerStyle(20);
         hEffInt2S1S->SetTitle("");
         hEffInt2S1S->GetXaxis()->SetTitle("Integrated");
         hEffInt2S1S->GetXaxis()->CenterTitle();

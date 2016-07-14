@@ -42,7 +42,7 @@
   gStyle->SetHistMinimumZero(kTRUE);
 
   //gStyle->SetErrorX(0); // disable if you want to draw horizontal error bars, e.g. when having variable bin size
-  gStyle->SetEndErrorSize(0);
+  //gStyle->SetEndErrorSize(0);
 
   gStyle->SetMarkerStyle(20);
   gStyle->SetMarkerSize(0.8);
