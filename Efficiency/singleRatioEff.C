@@ -88,8 +88,8 @@ void singleRatioEff(bool isPbPb = true){
                 EffDenErrH = hEffDenCent->GetErrorYhigh(i);
                 EffDenErrL = hEffDenCent->GetErrorYlow(i);
 		EffRatio = EffNum / EffDen;
-                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrH);  //Calculation for the combined efficiency	
-                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL); //typo EffL -> ErrL
+                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrL);  //Calculation for the combined efficiency	
+                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrH); 
 
                 hEffCen2S1S->SetPoint(i, CenBin[i], EffRatio);
                 hEffCen2S1S->SetPointError(i, CenBinErr[i], CenBinErr[i], EffRatioErrL, EffRatioErrH);
@@ -117,8 +117,8 @@ void singleRatioEff(bool isPbPb = true){
                 EffDenErrH = hEffDenPt->GetErrorYhigh(i);
                 EffDenErrL = hEffDenPt->GetErrorYlow(i);
 		EffRatio = EffNum / EffDen;
-                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrH);  //Calculation for the combined efficiency	
-                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL); //typo EffL -> ErrL
+                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrL);  //Calculation for the combined efficiency	
+                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrH); 
 
                 hEffPt2S1S->SetPoint(i, ptBin[i], EffRatio);
                 hEffPt2S1S->SetPointError(i, ptBinErr[i], ptBinErr[i], EffRatioErrL, EffRatioErrH);
@@ -144,8 +144,8 @@ void singleRatioEff(bool isPbPb = true){
                 EffDenErrH = hEffDenRap->GetErrorYhigh(i);
                 EffDenErrL = hEffDenRap->GetErrorYlow(i);
 		EffRatio = EffNum / EffDen;
-                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrH);  //Calculation for the combined efficiency	
-                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL); //typo EffL -> ErrL
+                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrL);  //Calculation for the combined efficiency	
+                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrH); 
 
                 hEffRap2S1S->SetPoint(i, rapBin[i], EffRatio);
                 hEffRap2S1S->SetPointError(i, rapBinErr[i], rapBinErr[i], EffRatioErrL, EffRatioErrH);
@@ -170,8 +170,8 @@ void singleRatioEff(bool isPbPb = true){
                 EffDenErrH = hEffDenInt->GetErrorYhigh(i);
                 EffDenErrL = hEffDenInt->GetErrorYlow(i);
 		EffRatio = EffNum / EffDen;
-                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrH);  //Calculation for the combined efficiency	
-                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL); //typo EffL -> ErrL
+                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrL);  //Calculation for the combined efficiency	
+                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrH); 
 
                 hEffInt2S1S->SetPoint(i, intBin[i], EffRatio);
                 hEffInt2S1S->SetPointError(i, intBinErr[i], intBinErr[i], EffRatioErrL, EffRatioErrH);

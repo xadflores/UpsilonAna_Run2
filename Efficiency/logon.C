@@ -2,8 +2,8 @@
   gROOT->SetStyle("Plain");
   gStyle->SetPalette(1);
   gStyle->SetOptTitle(0);
-  gStyle->SetOptStat(0);
-  gStyle->SetOptFit(0);
+  gStyle->SetOptStat(1111);
+  gStyle->SetOptFit(1111);
 
   gStyle->SetTitleFillColor(0);
   //  gStyle->SetStatColor(0);

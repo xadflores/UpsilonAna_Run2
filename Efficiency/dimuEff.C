@@ -27,39 +27,39 @@ void dimuEff(
 	int oniaMode = 2, //1 = 1S and 2 = 2S
 	bool isPbPb = true //true = PbPb and false = pp
 	){      // Change function name
-       
 
-        gROOT->Macro("logon.C+");
+
+	gROOT->Macro("logon.C+");
 
 	TChain myTree("hionia/myTree");   // Change source of tree
 
 
-        if(oniaMode == 2 && !isPbPb){
-        myTree.Add("OniaTree_Ups2SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");   
-        }
-
-        if(oniaMode == 1 && !isPbPb){
-        myTree.Add("OniaTree_Ups1SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");   
-        }
-
-
-        if(oniaMode == 2 && isPbPb){
-        myTree.Add("OniaTree_Pythia8_Ups2SMM_ptUps2S_00_03_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");   //  Change tree being added (Different for pp1S, pp2S, PbPb1S, PbPb2S)
-        myTree.Add("OniaTree_Pythia8_Ups2SMM_ptUps2S_03_06_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("OniaTree_Pythia8_Ups2SMM_ptUps2S_06_09_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("OniaTree_Pythia8_Ups2SMM_ptUps2S_09_12_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("OniaTree_Pythia8_Ups2SMM_ptUps2S_12_15_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("OniaTree_Pythia8_Ups2SMM_ptUps2S_15_inf_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+	if (oniaMode == 2 && !isPbPb){
+		myTree.Add("files/OniaTree_Ups2SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
 	}
 
-        if(oniaMode == 1 && isPbPb){
-        myTree.Add("OniaTree_Pythia8_Ups1SMM_ptUps_00_03_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");   //  Change tree being added (Different for pp1S, pp2S, PbPb1S, PbPb2S)
-        myTree.Add("OniaTree_Pythia8_Ups1SMM_ptUps_03_06_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("OniaTree_Pythia8_Ups1SMM_ptUps_06_09_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("OniaTree_Pythia8_Ups1SMM_ptUps_09_12_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("OniaTree_Pythia8_Ups1SMM_ptUps_12_15_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
-        myTree.Add("OniaTree_Pythia8_Ups1SMM_ptUps_15_30_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
- 	}
+	if (oniaMode == 1 && !isPbPb){
+		myTree.Add("files/OniaTree_Ups1SMM_5p02TeV_TuneCUETP8M1_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
+	}
+
+
+	if (oniaMode == 2 && isPbPb){
+		myTree.Add("files/OniaTree_Pythia8_Ups2SMM_ptUps2S_00_03_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");   //  Change tree being added (Different for pp1S, pp2S, PbPb1S, PbPb2S)
+		myTree.Add("files/OniaTree_Pythia8_Ups2SMM_ptUps2S_03_06_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+		myTree.Add("files/OniaTree_Pythia8_Ups2SMM_ptUps2S_06_09_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+		myTree.Add("files/OniaTree_Pythia8_Ups2SMM_ptUps2S_09_12_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+		myTree.Add("files/OniaTree_Pythia8_Ups2SMM_ptUps2S_12_15_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+		myTree.Add("files/OniaTree_Pythia8_Ups2SMM_ptUps2S_15_inf_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+	}
+
+	if (oniaMode == 1 && isPbPb){
+		myTree.Add("files/OniaTree_Pythia8_Ups1SMM_ptUps_00_03_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");   //  Change tree being added (Different for pp1S, pp2S, PbPb1S, PbPb2S)
+		myTree.Add("files/OniaTree_Pythia8_Ups1SMM_ptUps_03_06_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+		myTree.Add("files/OniaTree_Pythia8_Ups1SMM_ptUps_06_09_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+		myTree.Add("files/OniaTree_Pythia8_Ups1SMM_ptUps_09_12_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+		myTree.Add("files/OniaTree_Pythia8_Ups1SMM_ptUps_12_15_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+		myTree.Add("files/OniaTree_Pythia8_Ups1SMM_ptUps_15_30_Hydjet_MB_HINPbPbWinter16DR-75X_mcRun2_HeavyIon_v13-v1.root");
+	}
 
 
 
@@ -76,24 +76,24 @@ void dimuEff(
 	Bool_t          muPlGoodMu;
 	Float_t         vProb;
 
-	float          ptWeight; 
+	float          ptWeight;
 	float          centWeight;
-	float          ptBin[nPtBin] = {2.5,8.5,21};   
-	float          ptBinEdges[nPtBin+1] = {0,5,12,30};   
-	float          rapBin[nPtBin] = {0.6,1.8}; 
-	float          rapBinEdges[nPtBin+1] = {0,1.2,2.4}; 
+	float          ptBin[nPtBin] = { 2.5, 8.5, 21 };
+	float          ptBinEdges[nPtBin + 1] = { 0, 5, 12, 30 };
+	float          rapBin[nPtBin] = { 0.6, 1.8 };
+	float          rapBinEdges[nPtBin + 1] = { 0, 1.2, 2.4 };
 
-	float           CenBin[nCenBin] = {5,15,30,50,70,90,110,130,150};
-	float    	CenBinEdges[nCenBin+1] = {0,10,20,40,60,80,100,120,140,160};
-       
-        float           IntBin[1] = {160};
-	float		IntBinEdges[2] = {0,160}; 
-        float          ptReweight=0.0;
+	float           CenBin[nCenBin] = { 5, 15, 30, 50, 70, 90, 110, 130, 150 };
+	float    	CenBinEdges[nCenBin + 1] = { 0, 10, 20, 40, 60, 80, 100, 120, 140, 160 };
 
-        float 		massLow=0;
-        float 		massHigh=0; 
+	float           IntBin[1] = { 160 };
+	float		IntBinEdges[2] = { 0, 160 };
+	float          ptReweight = 0.0;
 
-	Int_t           Centrality; 
+	float 		massLow = 0;
+	float 		massHigh = 0;
+
+	Int_t           Centrality;
 	ULong64_t       HLTriggers;
 	Int_t           Reco_QQ_size;
 	Int_t           Reco_QQ_sign[36];   //[Reco_QQ_size]
@@ -166,11 +166,11 @@ void dimuEff(
 	//Set object pointer, Initialize
 	Reco_QQ_4mom = 0;
 	Reco_QQ_mupl_4mom = 0;
-	Reco_QQ_mumi_4mom = 0;	
-	
+	Reco_QQ_mumi_4mom = 0;
+
 	Gen_QQ_4mom = 0;
 	Gen_QQ_mupl_4mom = 0;
-	Gen_QQ_mumi_4mom = 0;	
+	Gen_QQ_mumi_4mom = 0;
 
 
 	myTree.SetBranchAddress("Centrality", &Centrality, &b_Centrality);
@@ -200,112 +200,118 @@ void dimuEff(
 	myTree.SetBranchAddress("Gen_QQ_mupl_4mom", &Gen_QQ_mupl_4mom, &b_Gen_QQ_mupl_4mom);
 	myTree.SetBranchAddress("Gen_QQ_mumi_4mom", &Gen_QQ_mumi_4mom, &b_Gen_QQ_mumi_4mom);
 
-        myTree.SetBranchStatus("*",0);
+	myTree.SetBranchStatus("*", 0);
 
 
-        myTree.SetBranchStatus("Centrality",1);
-        myTree.SetBranchStatus("HLTriggers",1);
-        myTree.SetBranchStatus("Reco_QQ_size",1);
-        myTree.SetBranchStatus("Reco_QQ_sign",1);
-        myTree.SetBranchStatus("Reco_QQ_4mom",1);
-        myTree.SetBranchStatus("Reco_QQ_mupl_4mom",1);
-        myTree.SetBranchStatus("Reco_QQ_mumi_4mom",1);
-        myTree.SetBranchStatus("Reco_QQ_trig",1);
-        myTree.SetBranchStatus("Reco_QQ_VtxProb",1);
-        myTree.SetBranchStatus("Reco_QQ_mupl_isGoodMuon",1);
-        myTree.SetBranchStatus("Reco_QQ_mumi_isGoodMuon",1);
-        myTree.SetBranchStatus("Reco_QQ_mupl_nPixWMea",1);
-        myTree.SetBranchStatus("Reco_QQ_mumi_nPixWMea",1);
-        myTree.SetBranchStatus("Reco_QQ_mupl_nTrkWMea",1);
-        myTree.SetBranchStatus("Reco_QQ_mumi_nTrkWMea",1);
-        myTree.SetBranchStatus("Reco_QQ_mupl_dxy",1);
-        myTree.SetBranchStatus("Reco_QQ_mumi_dxy",1);
-        myTree.SetBranchStatus("Reco_QQ_mupl_dz",1);
-        myTree.SetBranchStatus("Reco_QQ_mumi_dz",1);
+	myTree.SetBranchStatus("Centrality", 1);
+	myTree.SetBranchStatus("HLTriggers", 1);
+	myTree.SetBranchStatus("Reco_QQ_size", 1);
+	myTree.SetBranchStatus("Reco_QQ_sign", 1);
+	myTree.SetBranchStatus("Reco_QQ_4mom", 1);
+	myTree.SetBranchStatus("Reco_QQ_mupl_4mom", 1);
+	myTree.SetBranchStatus("Reco_QQ_mumi_4mom", 1);
+	myTree.SetBranchStatus("Reco_QQ_trig", 1);
+	myTree.SetBranchStatus("Reco_QQ_VtxProb", 1);
+	myTree.SetBranchStatus("Reco_QQ_mupl_isGoodMuon", 1);
+	myTree.SetBranchStatus("Reco_QQ_mumi_isGoodMuon", 1);
+	myTree.SetBranchStatus("Reco_QQ_mupl_nPixWMea", 1);
+	myTree.SetBranchStatus("Reco_QQ_mumi_nPixWMea", 1);
+	myTree.SetBranchStatus("Reco_QQ_mupl_nTrkWMea", 1);
+	myTree.SetBranchStatus("Reco_QQ_mumi_nTrkWMea", 1);
+	myTree.SetBranchStatus("Reco_QQ_mupl_dxy", 1);
+	myTree.SetBranchStatus("Reco_QQ_mumi_dxy", 1);
+	myTree.SetBranchStatus("Reco_QQ_mupl_dz", 1);
+	myTree.SetBranchStatus("Reco_QQ_mumi_dz", 1);
 
 
 
-        myTree.SetBranchStatus("Gen_QQ_size",1);
-        myTree.SetBranchStatus("Gen_QQ_4mom",1);
-        myTree.SetBranchStatus("Gen_QQ_mupl_4mom",1);
-        myTree.SetBranchStatus("Gen_QQ_mumi_4mom",1);
-
-	
-
-	TH1I  *RecoEvents=new TH1I("RecoEvents","Reconstructed", isPbPb ? nCenBin : 1,isPbPb ? CenBinEdges : IntBinEdges);
-	TH1I  *GenEvents=new TH1I("GenEvents","Generated", isPbPb ? nCenBin : 1,isPbPb ? CenBinEdges : IntBinEdges);
-
-	TH1I  *RecoEventsInt=new TH1I("RecoEventsInt","Reconstructed", 1,IntBinEdges);
-	TH1I  *GenEventsInt=new TH1I("GenEventsInt","Generated", 1,IntBinEdges);
-
-	TH1F  *RecoEventsPt=new TH1F("RecoEventsPt","Reconstructed", nPtBin,ptBinEdges);
-	TH1F  *GenEventsPt=new TH1F("GenEventsPt","Generated", nPtBin,ptBinEdges);
-
-	TH1F  *RecoEventsRap=new TH1F("RecoEventsRap","Reconstructed", nRapBin,rapBinEdges);
-	TH1F  *GenEventsRap=new TH1F("GenEventsRap","Generated", nRapBin,rapBinEdges);
+	myTree.SetBranchStatus("Gen_QQ_size", 1);
+	myTree.SetBranchStatus("Gen_QQ_4mom", 1);
+	myTree.SetBranchStatus("Gen_QQ_mupl_4mom", 1);
+	myTree.SetBranchStatus("Gen_QQ_mumi_4mom", 1);
 
 
-   	RecoEvents->Sumw2();
-        GenEvents->Sumw2();
- 	RecoEventsInt->Sumw2();
-        GenEventsInt->Sumw2();
-   	RecoEventsPt->Sumw2();
-        GenEventsPt->Sumw2();
- 	RecoEventsRap->Sumw2();
-        GenEventsRap->Sumw2();
 
-        //weights for 1S are used for 2S as well
+	TH1D  *RecoEvents = new TH1D("RecoEvents", "Reconstructed", isPbPb ? nCenBin : 1, isPbPb ? CenBinEdges : IntBinEdges);
+	TH1D  *GenEvents = new TH1D("GenEvents", "Generated", isPbPb ? nCenBin : 1, isPbPb ? CenBinEdges : IntBinEdges);
+
+	TH1D  *RecoEventsInt = new TH1D("RecoEventsInt", "Reconstructed", 1, IntBinEdges);
+	TH1D  *GenEventsInt = new TH1D("GenEventsInt", "Generated", 1, IntBinEdges);
+
+	TH1D  *RecoEventsPt = new TH1D("RecoEventsPt", "Reconstructed", nPtBin, ptBinEdges);
+	TH1D  *GenEventsPt = new TH1D("GenEventsPt", "Generated", nPtBin, ptBinEdges);
+
+	TH1D  *RecoEventsRap = new TH1D("RecoEventsRap", "Reconstructed", nRapBin, rapBinEdges);
+	TH1D  *GenEventsRap = new TH1D("GenEventsRap", "Generated", nRapBin, rapBinEdges);
+
+	TH1D  *hCentrality = new TH1D("hCentrality", "Centrality distribution", 202, -1, 201);
+	TH1D  *hCrossCheck = new TH1D("hCrossCheck", "Checking number of events", 2, 0, 2);
+
+	TH1D  *hRecoEventsD = new TH1D("hRecoEventsD", "Reconstructed", isPbPb ? nCenBin : 1, isPbPb ? CenBinEdges : IntBinEdges);
+	TH1D  *hGenEventsD = new TH1D("hGenEventsD", "Generated", isPbPb ? nCenBin : 1, isPbPb ? CenBinEdges : IntBinEdges);
+
+	RecoEvents->Sumw2();
+	GenEvents->Sumw2();
+	RecoEventsInt->Sumw2();
+	GenEventsInt->Sumw2();
+	RecoEventsPt->Sumw2();
+	GenEventsPt->Sumw2();
+	RecoEventsRap->Sumw2();
+	GenEventsRap->Sumw2();
+
+	//weights for 1S are used for 2S as well
 	TF1* f1SAA;
 	TF1* f2SAA;
 	TF1* f1Spp;
 	TF1* f2Spp;
-        TFile* ReweightFunctions = new TFile("dNdpT_ratio_tsallis_June7.root", "Open");
+	TFile* ReweightFunctions = new TFile("dNdpT_ratio_tsallis_June7.root", "Open");
 
-        f1SAA = (TF1*)ReweightFunctions->Get("f1sraa_test");
-        f2SAA = (TF1*)ReweightFunctions->Get("f2sraa_test");
-        f1Spp = (TF1*)ReweightFunctions->Get("f1srpp_test");
-        f2Spp = (TF1*)ReweightFunctions->Get("f2srpp_test");
+	f1SAA = (TF1*)ReweightFunctions->Get("f1sraa_test");
+	f2SAA = (TF1*)ReweightFunctions->Get("f2sraa_test");
+	f1Spp = (TF1*)ReweightFunctions->Get("f1srpp_test");
+	f2Spp = (TF1*)ReweightFunctions->Get("f2srpp_test");
 
-        //f1SAA->SetNpx(100000);
-        //f2SAA->SetNpx(100000);
+	//f1SAA->SetNpx(100000);
+	//f2SAA->SetNpx(100000);
 	//f1SAA->SetRange(0,40);
 	//f2SAA->SetRange(0,40);
-	
 
 
-	if(oniaMode == 1){
-	massLow = m1S_low;
-	massHigh = m1S_high;
+
+	if (oniaMode == 1){
+		massLow = m1S_low;
+		massHigh = m1S_high;
 	}
-	else{	
-	massLow = m2S_low;
-	massHigh = m2S_high;
+	else{
+		massLow = m2S_low;
+		massHigh = m2S_high;
 	}
 
 	Long64_t nentries = myTree.GetEntries();
-	cout << nentries<<endl;
+	cout << nentries << endl;
 
-	for (Long64_t jentry=0; jentry<nentries; jentry++){
+	for (Long64_t jentry = 0; jentry < nentries; jentry++){
 		myTree.GetEntry(jentry);
 
 		//Numerator Loop RECO
-		for (int iQQ=0; iQQ<Reco_QQ_size;iQQ++){
-			TLorentzVector *qq4mom = (TLorentzVector*) Reco_QQ_4mom->At(iQQ);
-			TLorentzVector *mumi4mom = (TLorentzVector*) Reco_QQ_mumi_4mom->At(iQQ);
-			TLorentzVector *mupl4mom = (TLorentzVector*) Reco_QQ_mupl_4mom->At(iQQ);
+		for (int iQQ = 0; iQQ < Reco_QQ_size; iQQ++){
+			hCrossCheck->Fill(1);
+			TLorentzVector *qq4mom = (TLorentzVector*)Reco_QQ_4mom->At(iQQ);
+			TLorentzVector *mumi4mom = (TLorentzVector*)Reco_QQ_mumi_4mom->At(iQQ);
+			TLorentzVector *mupl4mom = (TLorentzVector*)Reco_QQ_mupl_4mom->At(iQQ);
 
 			//--Muid cuts for muon minus
-			muMiDxy=Reco_QQ_mumi_dxy[iQQ];
-			muMiDz=Reco_QQ_mumi_dz[iQQ];
-			muMiNPxlLayers=Reco_QQ_mumi_nPixWMea[iQQ];
-			muMiNTrkLayers=Reco_QQ_mumi_nTrkWMea[iQQ];
+			muMiDxy = Reco_QQ_mumi_dxy[iQQ];
+			muMiDz = Reco_QQ_mumi_dz[iQQ];
+			muMiNPxlLayers = Reco_QQ_mumi_nPixWMea[iQQ];
+			muMiNTrkLayers = Reco_QQ_mumi_nTrkWMea[iQQ];
 			muMiGoodMu = Reco_QQ_mumi_isGoodMuon[iQQ];
 
 			//--Muid cuts for muon plus
-			muPlDxy=Reco_QQ_mupl_dxy[iQQ];
-			muPlDz=Reco_QQ_mupl_dz[iQQ];
-			muPlNPxlLayers=Reco_QQ_mupl_nPixWMea[iQQ];
-			muPlNTrkLayers=Reco_QQ_mupl_nTrkWMea[iQQ];
+			muPlDxy = Reco_QQ_mupl_dxy[iQQ];
+			muPlDz = Reco_QQ_mupl_dz[iQQ];
+			muPlNPxlLayers = Reco_QQ_mupl_nPixWMea[iQQ];
+			muPlNTrkLayers = Reco_QQ_mupl_nTrkWMea[iQQ];
 			muPlGoodMu = Reco_QQ_mupl_isGoodMuon[iQQ];
 			vProb = Reco_QQ_VtxProb[iQQ];
 
@@ -317,73 +323,77 @@ void dimuEff(
 			bool MassCutPass = 0;
 
 			//--Muon id cuts
-			if( (muPlGoodMu==1) && muPlNTrkLayers> 5 &&  muPlNPxlLayers > 0 && TMath::Abs(muPlDxy) < 0.3 && TMath::Abs(muPlDz) < 20 && vProb > 0.01){mupl_cut = 1;}    
-			if( (muMiGoodMu==1) && muMiNTrkLayers> 5 &&  muMiNPxlLayers > 0 && TMath::Abs(muMiDxy) < 0.3 && TMath::Abs(muMiDz) < 20 ){mumi_cut = 1;}
+			if ((muPlGoodMu == 1) && muPlNTrkLayers > 5 && muPlNPxlLayers > 0 && TMath::Abs(muPlDxy) < 0.3 && TMath::Abs(muPlDz) < 20 && vProb > 0.01){ mupl_cut = 1; }
+			if ((muMiGoodMu == 1) && muMiNTrkLayers > 5 && muMiNPxlLayers > 0 && TMath::Abs(muMiDxy) < 0.3 && TMath::Abs(muMiDz) < 20){ mumi_cut = 1; }
 
 			//check if muons are in acceptance
-			if(IsAccept(mupl4mom) && IsAccept(mumi4mom)){acceptMu = 1;}
+			if (IsAccept(mupl4mom) && IsAccept(mumi4mom)){ acceptMu = 1; }
 			if (PtCut(mupl4mom) && PtCut(mumi4mom)){ PtCutPass = 1; }
-			MassCutPass = MassCut(qq4mom, massLow, massHigh);			
+			MassCutPass = MassCut(qq4mom, massLow, massHigh);
 
 			//check if trigger bit is matched to dimuon
-			if((HLTriggers&1)==1 && (Reco_QQ_trig[iQQ]&1)==1){trigL1Dmu = 1;}
+			if ((HLTriggers & 1) == 1 && (Reco_QQ_trig[iQQ] & 1) == 1){ trigL1Dmu = 1; }
 
 			//weights only needed for PbPb
-			 float weight = 0;
-			 ptWeight=0;
- 			 centWeight = 0;
-			 centWeight = FindCenWeight(Centrality);
-			 ptReweight = 0;
+			float weight = 0;
+			ptWeight = 0;
+			centWeight = 0;
+			centWeight = FindCenWeight(Centrality);
+			ptReweight = 0;
 
-			 //getting reco pt
-                         float ptReco = 0;
-                         float rapReco = 0;
-                         ptReco = qq4mom->Pt();
-                         rapReco = TMath::Abs(qq4mom->Rapidity());
+			//getting reco pt
+			float ptReco = 0;
+			float rapReco = 0;
+			ptReco = qq4mom->Pt();
+			rapReco = TMath::Abs(qq4mom->Rapidity());
 
-			 //getting the tree weight from pt generated MC bins
-                        
-			 //reweight from dn/dpt function
-                         int tNum = -1;
-			 //total weighting factor
-                         if(isPbPb){
-                         if(oniaMode==1){ptReweight = (f1SAA->Eval(ptReco));}
-                         if(oniaMode==2){ptReweight = (f2SAA->Eval(ptReco));} 
-                         tNum = myTree.GetTreeNumber();
-			 //ptReweight=1;
-			 ptWeight = GetWeight(tNum,oniaMode);
-                         weight = centWeight*ptWeight*ptReweight;
-			 }
-			 else {
-                         if(oniaMode==1){ptReweight = (f1Spp->Eval(ptReco));}
-                         if(oniaMode==2){ptReweight = (f2Spp->Eval(ptReco));}
-			 //ptReweight=1;
-			 weight = ptReweight;
- 			 }
-                        
-	      		bool recoPass=0;
+			//getting the tree weight from pt generated MC bins
 
-			if (Reco_QQ_sign[iQQ]==0 && acceptMu && mupl_cut && mumi_cut && trigL1Dmu){recoPass=1;}
-
-                        //filling RecoEvent Histo if passing
-			if(rapReco<2.4 && ptReco<30 && Centrality<160){
-			if(recoPass == 1 && PtCutPass ==1 && MassCutPass == 1){
-			RecoEvents->Fill(Centrality, weight);
-                        RecoEventsInt->Fill(Centrality,weight);
-			RecoEventsPt->Fill(ptReco,weight);
-			RecoEventsRap->Fill(rapReco,weight);
+			//reweight from dn/dpt function
+			int tNum = -1;
+			//total weighting factor
+			if (isPbPb){
+				if (oniaMode == 1){ ptReweight = (f1SAA->Eval(ptReco)); }
+				if (oniaMode == 2){ ptReweight = (f2SAA->Eval(ptReco)); }
+				tNum = myTree.GetTreeNumber();
+				//ptReweight = 1;
+				ptWeight = GetWeight(tNum, oniaMode);
+				weight = centWeight*ptWeight*ptReweight;
 			}
+			else {
+				if (oniaMode == 1){ ptReweight = (f1Spp->Eval(ptReco)); }
+				if (oniaMode == 2){ ptReweight = (f2Spp->Eval(ptReco)); }
+				//ptReweight = 1;
+				weight = ptReweight;
 			}
-		
 
-	}
+			bool recoPass = 0;
+
+			if (Reco_QQ_sign[iQQ] == 0 && acceptMu && mupl_cut && mumi_cut && trigL1Dmu){ recoPass = 1; }
+
+			//filling RecoEvent Histo if passing
+			if (rapReco < 2.4 && ptReco < 30 && Centrality < 160){
+				if (recoPass == 1 && PtCutPass == 1 && MassCutPass == 1){
+					RecoEvents->Fill(Centrality, weight);
+					hRecoEventsD->Fill(Centrality, weight);
+					RecoEventsInt->Fill(Centrality, weight);
+					RecoEventsPt->Fill(ptReco, weight);
+					RecoEventsRap->Fill(rapReco, weight);
+					hCentrality->Fill(Centrality, weight);
+				}
+			}
+
+
+		}
 
 
 		//Denominator loop  GEN
-		for (int iQQ=0; iQQ<Gen_QQ_size;iQQ++){
-			TLorentzVector *g_qq4mom = (TLorentzVector*) Gen_QQ_4mom->At(iQQ);
-			TLorentzVector *g_mumi4mom = (TLorentzVector*) Gen_QQ_mumi_4mom->At(iQQ);
-			TLorentzVector *g_mupl4mom = (TLorentzVector*) Gen_QQ_mupl_4mom->At(iQQ);
+		for (int iQQ = 0; iQQ < Gen_QQ_size; iQQ++){
+
+			hCrossCheck->Fill(0);
+			TLorentzVector *g_qq4mom = (TLorentzVector*)Gen_QQ_4mom->At(iQQ);
+			TLorentzVector *g_mumi4mom = (TLorentzVector*)Gen_QQ_mumi_4mom->At(iQQ);
+			TLorentzVector *g_mupl4mom = (TLorentzVector*)Gen_QQ_mupl_4mom->At(iQQ);
 
 			bool acceptMu = 0;
 			bool PtCutPass = 0;
@@ -391,53 +401,54 @@ void dimuEff(
 
 
 			//check if muons are in acceptance
-			if(IsAccept(g_mupl4mom) && IsAccept(g_mumi4mom)){acceptMu = 1;}
+			if (IsAccept(g_mupl4mom) && IsAccept(g_mumi4mom)){ acceptMu = 1; }
 			if (PtCut(g_mupl4mom) && PtCut(g_mumi4mom)){ PtCutPass = 1; }
 			MassCutPass = MassCut(g_qq4mom, massLow, massHigh);
 
 
 
 			//weights only needed for PbPb
-			 float weight = 0;
-			 ptWeight=0;
-			 centWeight = 0;
-	 		 ptReweight = 0;
-			 centWeight = FindCenWeight(Centrality);
-                         
-			 //getting a pt gen value 
-                         float ptGen = 0;
-                         float rapGen = 0;
-  			 ptGen = g_qq4mom->Pt();
-  			 rapGen = TMath::Abs(g_qq4mom->Rapidity());
-                          
+			float weight = 0;
+			ptWeight = 0;
+			centWeight = 0;
+			ptReweight = 0;
+			centWeight = FindCenWeight(Centrality);
 
-			 
-			 int tNum = -1;
-                         //getting the tree pt mc weighting from generation
-			 if(isPbPb){
-                         if(oniaMode==1){ptReweight = (f1SAA->Eval(ptGen));}
-                         if(oniaMode==2){ptReweight = (f2SAA->Eval(ptGen));}
-                         tNum = myTree.GetTreeNumber();
-			 //ptReweight=1;
-			 ptWeight = GetWeight(tNum,oniaMode);
-                         weight = centWeight*ptWeight*ptReweight;
-			 }
-			 else{
-                         if(oniaMode==1){ptReweight = (f1Spp->Eval(ptGen));}
-                         if(oniaMode==2){ptReweight = (f2Spp->Eval(ptGen));}
-			 //ptReweight=1;
-			 weight = ptReweight;
-			 }
+			//getting a pt gen value 
+			float ptGen = 0;
+			float rapGen = 0;
+			ptGen = g_qq4mom->Pt();
+			rapGen = TMath::Abs(g_qq4mom->Rapidity());
 
-	                //fill GenEvent Histo Denominator if passing 
-			if(rapGen<2.4 && ptGen<30 && Centrality <160){
-			if(acceptMu == 1 && PtCutPass == 1 && MassCutPass == 1){
-			GenEvents->Fill(Centrality, weight);
-			GenEventsInt->Fill(Centrality, weight);
-			GenEventsPt->Fill(ptGen, weight);
-			GenEventsRap->Fill(rapGen, weight);
-				
+
+
+			int tNum = -1;
+			//getting the tree pt mc weighting from generation
+			if (isPbPb){
+				if (oniaMode == 1){ ptReweight = (f1SAA->Eval(ptGen)); }
+				if (oniaMode == 2){ ptReweight = (f2SAA->Eval(ptGen)); }
+				tNum = myTree.GetTreeNumber();
+				//ptReweight = 1;
+				ptWeight = GetWeight(tNum, oniaMode);
+				weight = centWeight*ptWeight*ptReweight;
 			}
+			else{
+				if (oniaMode == 1){ ptReweight = (f1Spp->Eval(ptGen)); }
+				if (oniaMode == 2){ ptReweight = (f2Spp->Eval(ptGen)); }
+				//ptReweight = 1;
+				weight = ptReweight;
+			}
+
+			//fill GenEvent Histo Denominator if passing 
+			if (rapGen < 2.4 && ptGen < 30 && Centrality < 160){
+				if (acceptMu == 1 && PtCutPass == 1 && MassCutPass == 1){
+					GenEvents->Fill(Centrality, weight);
+					hGenEventsD->Fill(Centrality, weight);
+					GenEventsInt->Fill(Centrality, weight);
+					GenEventsPt->Fill(ptGen, weight);
+					GenEventsRap->Fill(rapGen, weight);
+
+				}
 			}
 
 		}
@@ -571,7 +582,22 @@ GenEvents->Draw();
 
 TFile* MyFileEff;
 MyFileEff = new TFile(Form("Eff_%s_%dS.root",isPbPb ? "PbPb" : "PP",oniaMode), "Recreate");
-if(isPbPb){EffCent->Write();}
+if(isPbPb){
+	EffCent->Write();
+	GenEvents->Write();
+	RecoEvents->Write();
+}
+
+hGenEventsD->Write();
+hRecoEventsD->Write();
+RecoEventsInt->Write();
+RecoEventsPt->Write();
+RecoEventsRap->Write();
+GenEventsInt->Write();
+GenEventsPt->Write();
+GenEventsRap->Write();
+hCentrality->Write();
+hCrossCheck->Write();
 EffPt->Write();
 EffRap->Write();
 EffInt->Write();

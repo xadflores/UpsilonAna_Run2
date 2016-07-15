@@ -89,8 +89,8 @@ void doubleRatioEff(){
 //		cout<<"Calculated individual errors"<<endl;
 		EffRatio = EffNum / EffDen;
 //		cout<<"Calculated ratio of efficiencies"<<endl;
-                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrH);  //Calculation for the combined efficiency	
-                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL); //typo EffL -> ErrL
+                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrL);  //Calculation for the combined efficiency	
+                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrH); 
 //		cout<<"Calculated error ratios"<<endl;
 
                 hEffCenDouble->SetPoint(i, CenBin[i], EffRatio);
@@ -123,8 +123,8 @@ void doubleRatioEff(){
 		//cout<<"Calculated individual errors"<<endl;
 		EffRatio = EffNum / EffDen;
 		//cout<<"Calculated ratio of efficiencies"<<endl;
-                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrH);  //Calculation for the combined efficiency	
-                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL); //typo EffL -> ErrL
+                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrL);  //Calculation for the combined efficiency	
+                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrH); 
 		//cout<<"Calculated error ratios"<<endl;
 
                 hEffPtDouble->SetPoint(i, ptBin[i], EffRatio);
@@ -158,8 +158,8 @@ void doubleRatioEff(){
 		//cout<<"Calculated individual errors"<<endl;
 		EffRatio = EffNum / EffDen;
 		//cout<<"Calculated ratio of efficiencies"<<endl;
-                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrH);  //Calculation for the combined efficiency	
-                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL); //typo EffL -> ErrL
+                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrL);  //Calculation for the combined efficiency	
+                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrH); 
 		//cout<<"Calculated error ratios"<<endl;
 
                 hEffRapDouble->SetPoint(i, rapBin[i], EffRatio);
@@ -192,8 +192,8 @@ void doubleRatioEff(){
 		//cout<<"Calculated individual errors"<<endl;
 		EffRatio = EffNum / EffDen;
 		//cout<<"Calculated ratio of efficiencies"<<endl;
-                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrH);  //Calculation for the combined efficiency	
-                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrL); //typo EffL -> ErrL
+                EffRatioErrH = RError(EffNum, EffNumErrH, EffDen, EffDenErrL);  //Calculation for the combined efficiency	
+                EffRatioErrL = RError(EffNum, EffNumErrL, EffDen, EffDenErrH); 
 		//cout<<"Calculated error ratios"<<endl;
 
                 hEffIntDouble->SetPoint(i, intBin[i], EffRatio);
