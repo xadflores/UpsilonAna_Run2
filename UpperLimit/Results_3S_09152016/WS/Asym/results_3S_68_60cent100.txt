@@ -1,0 +1,6 @@
+Scanning WS/WS_combo3S_60cent100.root using the POI DR31, the pdf joint and the workspace wcombo with CL 0.68
+DR31 0.242226
+68% CL confidence interval from a likelihood scan on DR31
+0.0868069 0.401031
+Feldman-Cousins interval from StandardHypoTestInvDemo(WS/WS_combo3S_60cent100.root,wcombo,0x2a71a80,0x2a79220,data,2,2,0,20,0.0434035,0.601546,100,0,0);
+0.0860876 0.401497
